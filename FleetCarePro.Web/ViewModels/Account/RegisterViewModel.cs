@@ -4,6 +4,8 @@ namespace FleetCarePro.Web.ViewModels.Account;
 
 public class RegisterViewModel
 {
+
+    //for testing
     [Required]
     public string FullName { get; set; } = null!;
 

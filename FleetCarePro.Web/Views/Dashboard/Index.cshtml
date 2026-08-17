@@ -7,10 +7,6 @@
 
 <div class="dashboard-page">
 
-    <!-- =========================
-         DASHBOARD HEADER
-         ========================= -->
-
     <div class="dashboard-header mb-4">
 
         <div>
@@ -34,10 +30,6 @@
 
     </div>
 
-
-    <!-- =====================================================
-         ADMIN DASHBOARD
-         ===================================================== -->
     @if (User.IsInRole("Admin"))
     {
         <!-- Main Statistics -->
@@ -357,10 +349,6 @@
         </div>
     }
 
-
-    <!-- =====================================================
-         FLEET MANAGER DASHBOARD
-         ===================================================== -->
     @if (User.IsInRole("FleetManager"))
     {
         <!-- Main Statistics -->
@@ -635,9 +623,6 @@
     }
 
 
-    <!-- =====================================================
-         DRIVER DASHBOARD
-         ===================================================== -->
     @if (User.IsInRole("Driver"))
     {
         <div class="row justify-content-center">

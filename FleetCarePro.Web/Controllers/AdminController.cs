@@ -15,53 +15,32 @@ public class AdminController : Controller
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
 
-    public AdminController(
-        UserManager<ApplicationUser> userManager,
-        RoleManager<IdentityRole> roleManager)
+    public AdminController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
     {
         _userManager = userManager;
         _roleManager = roleManager;
     }
 
-    // =========================
-    // USERS
-    // =========================
-
     [HttpGet]
     public async Task<IActionResult> Users()
     {
-        var users = _userManager.Users.ToList();
-
-        var userRoles = new Dictionary<string, string>();
-
+        var users =_userManager.Users.ToList();
+        var userRoles =new Dictionary<string, string>();
         foreach (var user in users)
         {
-            var roles = await _userManager.GetRolesAsync(user);
-
-            userRoles[user.Id] =
-                roles.FirstOrDefault() ?? "No Role";
+            var roles=await _userManager.GetRolesAsync(user);
+            userRoles[user.Id] =roles.FirstOrDefault() ?? "No Role";
         }
-
-        ViewBag.UserRoles = userRoles;
-
+        ViewBag.UserRoles=userRoles;
         return View(users);
     }
-
-    // =========================
-    // CREATE USER - GET
-    // =========================
 
     [HttpGet]
     public async Task<IActionResult> CreateUser()
     {
         await PopulateRolesAsync();
-
         return View();
     }
-
-    // =========================
-    // CREATE USER - POST
-    // =========================
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -76,37 +55,25 @@ public class AdminController : Controller
 
         if (!await _roleManager.RoleExistsAsync(model.Role))
         {
-            ModelState.AddModelError(
-                nameof(model.Role),
-                "Selected role does not exist.");
-
+            ModelState.AddModelError(nameof(model.Role), "Selected role does not exist.");
             await PopulateRolesAsync();
             return View(model);
         }
 
-        var existingEmail =
-            await _userManager.FindByEmailAsync(model.Email);
+        var existingEmail =await _userManager.FindByEmailAsync(model.Email);
 
         if (existingEmail != null)
         {
-            ModelState.AddModelError(
-                nameof(model.Email),
-                "Email is already registered.");
-
+            ModelState.AddModelError( nameof(model.Email), "Email is already registered.");
             await PopulateRolesAsync();
             return View(model);
         }
 
-        var existingEmployee =
-            _userManager.Users.Any(
-                u => u.EmployeeId == model.EmployeeId);
+        var existingEmployee = _userManager.Users.Any(u=> u.EmployeeId == model.EmployeeId);
 
         if (existingEmployee)
         {
-            ModelState.AddModelError(
-                nameof(model.EmployeeId),
-                "Employee ID is already registered.");
-
+            ModelState.AddModelError( nameof(model.EmployeeId), "Employee ID is already registered.");
             await PopulateRolesAsync();
             return View(model);
         }
@@ -119,51 +86,28 @@ public class AdminController : Controller
             EmployeeId = model.EmployeeId,
             EmailConfirmed = true
         };
-
-        var result =
-            await _userManager.CreateAsync(
-                user,
-                model.Password);
-
+        var result = await _userManager.CreateAsync(user, model.Password);
         if (!result.Succeeded)
         {
             foreach (var error in result.Errors)
             {
-                ModelState.AddModelError(
-                    string.Empty,
-                    error.Description);
+                ModelState.AddModelError(string.Empty,error.Description);
             }
-
             await PopulateRolesAsync();
             return View(model);
         }
 
-        await _userManager.AddToRoleAsync(
-            user,
-            model.Role);
-
-        TempData["SuccessMessage"] =
-            "User created successfully.";
-
+        await _userManager.AddToRoleAsync( user, model.Role);
+        TempData["SuccessMessage"] = "User created successfully.";
         return RedirectToAction(nameof(Users));
     }
-
-    // =========================
-    // EDIT USER - GET
-    // =========================
 
     [HttpGet]
     public async Task<IActionResult> EditUser(string id)
     {
-        var user =
-            await _userManager.FindByIdAsync(id);
-
-        if (user == null)
-            return NotFound();
-
-        var roles =
-            await _userManager.GetRolesAsync(user);
-
+        var user =await _userManager.FindByIdAsync(id);
+        if (user == null) return NotFound();
+        var roles =await _userManager.GetRolesAsync(user);
         var model = new EditUserViewModel
         {
             Id = user.Id,
@@ -172,15 +116,9 @@ public class AdminController : Controller
             Email = user.Email ?? string.Empty,
             Role = roles.FirstOrDefault() ?? string.Empty
         };
-
         await PopulateRolesAsync();
-
         return View(model);
     }
-
-    // =========================
-    // EDIT USER - POST
-    // =========================
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -195,45 +133,27 @@ public class AdminController : Controller
 
         if (!await _roleManager.RoleExistsAsync(model.Role))
         {
-            ModelState.AddModelError(
-                nameof(model.Role),
-                "Selected role does not exist.");
+            ModelState.AddModelError(nameof(model.Role),"Selected role does not exist.");
 
             await PopulateRolesAsync();
             return View(model);
         }
 
-        var user =
-            await _userManager.FindByIdAsync(model.Id);
-
-        if (user == null)
-            return NotFound();
-
-        var emailOwner =
-            await _userManager.FindByEmailAsync(model.Email);
-
-        if (emailOwner != null &&
-            emailOwner.Id != user.Id)
+        var user =await _userManager.FindByIdAsync(model.Id);
+        if (user == null) return NotFound();
+        var emailOwner =await _userManager.FindByEmailAsync(model.Email);
+        if (emailOwner != null &&emailOwner.Id != user.Id)
         {
-            ModelState.AddModelError(
-                nameof(model.Email),
-                "Email is already used by another user.");
-
+            ModelState.AddModelError(nameof(model.Email),"Email is already used by another user.");
             await PopulateRolesAsync();
             return View(model);
         }
 
-        var employeeOwner =
-            _userManager.Users.FirstOrDefault(
-                u => u.EmployeeId == model.EmployeeId &&
-                     u.Id != user.Id);
+        var employeeOwner =_userManager.Users.FirstOrDefault(u => u.EmployeeId == model.EmployeeId &&u.Id != user.Id);
 
         if (employeeOwner != null)
         {
-            ModelState.AddModelError(
-                nameof(model.EmployeeId),
-                "Employee ID is already used by another user.");
-
+            ModelState.AddModelError(nameof(model.EmployeeId), "Employee ID is already used by another user.");
             await PopulateRolesAsync();
             return View(model);
         }
@@ -243,121 +163,71 @@ public class AdminController : Controller
         user.Email = model.Email;
         user.UserName = model.Email;
 
-        var updateResult =
-            await _userManager.UpdateAsync(user);
+        var updateResult =await _userManager.UpdateAsync(user);
 
         if (!updateResult.Succeeded)
         {
             foreach (var error in updateResult.Errors)
             {
-                ModelState.AddModelError(
-                    string.Empty,
-                    error.Description);
+                ModelState.AddModelError( string.Empty,error.Description);
             }
 
             await PopulateRolesAsync();
             return View(model);
         }
-
-        var currentRoles =
-            await _userManager.GetRolesAsync(user);
-
+        var currentRoles =await _userManager.GetRolesAsync(user);
         if (currentRoles.Any())
         {
-            await _userManager.RemoveFromRolesAsync(
-                user,
-                currentRoles);
+            await _userManager.RemoveFromRolesAsync( user, currentRoles);
         }
-
-        await _userManager.AddToRoleAsync(
-            user,
-            model.Role);
-
-        TempData["SuccessMessage"] =
-            "User updated successfully.";
+        await _userManager.AddToRoleAsync( user, model.Role);
+        TempData["SuccessMessage"]="User updated successfully.";
 
         return RedirectToAction(nameof(Users));
     }
-
-    // =========================
-    // DELETE USER - GET
-    // =========================
 
     [HttpGet]
     public async Task<IActionResult> DeleteUser(string id)
     {
-        var user =
-            await _userManager.FindByIdAsync(id);
-
-        if (user == null)
-            return NotFound();
-
+        var user = await _userManager.FindByIdAsync(id);
+        if (user == null)return NotFound();
         return View(user);
     }
 
-    // =========================
-    // DELETE USER - POST
-    // =========================
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteUserConfirmed(
-        string id)
+    public async Task<IActionResult> DeleteUserConfirmed(string id)
     {
-        var user =
-            await _userManager.FindByIdAsync(id);
-
-        if (user == null)
-            return NotFound();
-
-        // Prevent admin from deleting their own account
+        var user =await _userManager.FindByIdAsync(id);
+        if (user == null) return NotFound();
         if (user.Id == _userManager.GetUserId(User))
         {
-            TempData["ErrorMessage"] =
-                "You cannot delete your own account.";
-
+            TempData["ErrorMessage"] ="You cannot delete your own account.";
             return RedirectToAction(nameof(Users));
         }
-
-        var result =
-            await _userManager.DeleteAsync(user);
-
+        var result = await _userManager.DeleteAsync(user);
         if (!result.Succeeded)
         {
             foreach (var error in result.Errors)
             {
-                ModelState.AddModelError(
-                    string.Empty,
-                    error.Description);
+                ModelState.AddModelError(string.Empty,error.Description);
             }
-
             return View("DeleteUser", user);
         }
 
-        TempData["SuccessMessage"] =
-            "User deleted successfully.";
-
+        TempData["SuccessMessage"]="User deleted successfully.";
         return RedirectToAction(nameof(Users));
     }
-
-    // =========================
-    // ROLES DROPDOWN
-    // =========================
-
     private async Task PopulateRolesAsync()
     {
-        var roles =
-            await _roleManager.Roles
-                .Select(r => r.Name!)
-                .ToListAsync();
+        var roles = await _roleManager.Roles .Select(r=>r.Name!).ToListAsync();
 
-        ViewBag.Roles = roles
-            .Select(role => new SelectListItem
+        ViewBag.Roles = roles .Select(role => new SelectListItem
             {
                 Value = role,
                 Text = role
-            })
-            .ToList();
+            }).ToList();
     }
 }
 

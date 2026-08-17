@@ -4,7 +4,6 @@ public class DashboardViewModel
 {
     public string WelcomeMessage { get; set; } = null!;
 
-    // Common statistics
     public int PendingServices { get; set; }
 
     public int ApprovedServices { get; set; }
@@ -17,10 +16,10 @@ public class DashboardViewModel
     public int TotalServiceCenters { get; set; }
     public int TotalServiceRecords { get; set; }
 
-    // Admin only
+    // Admin 
     public int TotalUsers { get; set; }
 
-    // Fleet Manager
+    //  Manager
     // Driver
     public int AssignedVehicles { get; set; }
 }

@@ -11,6 +11,7 @@ public class FileService : IFileService
         _rootPath = Path.Combine( Directory.GetCurrentDirectory(), "wwwroot", "uploads");
     }
 
+    //for testing
     public async Task<string> UploadAsync(Stream fileStream, string fileName, string folderName)
     {
         var folderPath = Path.Combine(_rootPath, folderName);
@@ -29,11 +30,7 @@ public class FileService : IFileService
     public async Task DeleteAsync(string filePath)
     {
         if (string.IsNullOrWhiteSpace(filePath))return;
-
-        var fullPath = Path.Combine(Directory.GetCurrentDirectory(),
-            "wwwroot",
-            filePath.TrimStart('/'));
-
+        var fullPath = Path.Combine(Directory.GetCurrentDirectory(),"wwwroot",filePath.TrimStart('/'));
         if (File.Exists(fullPath))
         {
             await Task.Run(() => File.Delete(fullPath));

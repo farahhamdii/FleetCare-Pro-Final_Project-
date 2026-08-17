@@ -31,11 +31,6 @@ public class VehicleController : Controller
         _mapper = mapper;
         _userManager = userManager;
     }
-
-    // =========================
-    // HELPER: POPULATE DRIVERS
-    // =========================
-
     private async Task PopulateDriversDropDownListAsync()
     {
         var drivers = await _userManager.GetUsersInRoleAsync("Driver");
@@ -47,10 +42,6 @@ public class VehicleController : Controller
         });
     }
 
-    // =========================
-    // INDEX
-    // =========================
-
     [HttpGet]
     public async Task<IActionResult> Index()
     {
@@ -59,10 +50,8 @@ public class VehicleController : Controller
         if (User.IsInRole("Driver"))
         {
             var driverId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
             if (string.IsNullOrEmpty(driverId))
                 return Forbid();
-
             vehicles = await _vehicleService.GetAssignedVehiclesAsync(driverId);
         }
         else
@@ -71,13 +60,8 @@ public class VehicleController : Controller
         }
 
         var viewModels = _mapper.Map<IEnumerable<VehicleListViewModel>>(vehicles);
-
         return View(viewModels);
     }
-
-    // =========================
-    // DETAILS
-    // =========================
 
     [HttpGet]
     public async Task<IActionResult> Details(int id)
@@ -87,10 +71,8 @@ public class VehicleController : Controller
         if (User.IsInRole("Driver"))
         {
             var driverId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
             if (string.IsNullOrEmpty(driverId))
                 return Forbid();
-
             vehicle = await _vehicleService.GetByIdForDriverAsync(id, driverId);
         }
         else
@@ -100,15 +82,10 @@ public class VehicleController : Controller
 
         if (vehicle == null)
             return NotFound();
-
         var viewModel = _mapper.Map<VehicleDetailsViewModel>(vehicle);
-
         return View(viewModel);
     }
 
-    // =========================
-    // CREATE - GET
-    // =========================
 
     [Authorize(Roles = "Admin,FleetManager")]
     [HttpGet]
@@ -118,9 +95,6 @@ public class VehicleController : Controller
         return View();
     }
 
-    // =========================
-    // CREATE - POST
-    // =========================
 
     [Authorize(Roles = "Admin,FleetManager")]
     [HttpPost]
@@ -141,9 +115,9 @@ public class VehicleController : Controller
             imageUrl = await SaveVehicleImageAsync(vehicle.VehicleImage);
         }
 
-        var dto = _mapper.Map<CreateVehicleDto>(vehicle);
+        var dto=_mapper.Map<CreateVehicleDto>(vehicle);
 
-        dto.VehicleImageURL = imageUrl;
+        dto.VehicleImageURL=imageUrl;
 
         await _vehicleService.CreateAsync(dto);
 
@@ -152,30 +126,21 @@ public class VehicleController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    // =========================
-    // EDIT - GET
-    // =========================
 
     [Authorize(Roles = "Admin,FleetManager")]
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
         var vehicle = await _vehicleService.GetByIdAsync(id);
-
         if (vehicle == null)
             return NotFound();
-
         var model = _mapper.Map<EditVehicleViewModel>(vehicle);
         model.ExistingImageUrl = vehicle.VehicleImageURL;
 
         await PopulateDriversDropDownListAsync();
-
         return View(model);
     }
 
-    // =========================
-    // EDIT - POST
-    // =========================
 
     [Authorize(Roles = "Admin,FleetManager")]
     [HttpPost]
@@ -210,13 +175,9 @@ public class VehicleController : Controller
             return NotFound();
 
         TempData["SuccessMessage"] = "Vehicle updated successfully.";
-
         return RedirectToAction(nameof(Index));
     }
 
-    // =========================
-    // DELETE
-    // =========================
 
     [Authorize(Roles = "Admin,FleetManager")]
     [HttpPost]
@@ -233,21 +194,12 @@ public class VehicleController : Controller
         {
             DeleteVehicleImage(vehicle.VehicleImageURL);
         }
-
         var success = await _vehicleService.DeleteAsync(id);
-
         if (!success)
             return NotFound();
-
         TempData["SuccessMessage"] = "Vehicle deleted successfully.";
-
         return RedirectToAction(nameof(Index));
     }
-
-    // =========================
-    // SAVE IMAGE
-    // =========================
-
     private async Task<string> SaveVehicleImageAsync(IFormFile image)
     {
         var uploadsFolder = Path.Combine(
@@ -267,14 +219,10 @@ public class VehicleController : Controller
         return $"/uploads/vehicles/{fileName}";
     }
 
-    // =========================
-    // DELETE IMAGE
-    // =========================
 
     private void DeleteVehicleImage(string imageUrl)
     {
         var fileName = Path.GetFileName(imageUrl);
-
         if (string.IsNullOrEmpty(fileName))
             return;
 

@@ -8,9 +8,7 @@ public class MaintenanceModeMiddleware
     private readonly RequestDelegate _next;
     private readonly IConfiguration _configuration;
 
-    public MaintenanceModeMiddleware(
-        RequestDelegate next,
-        IConfiguration configuration)
+    public MaintenanceModeMiddleware(RequestDelegate next,IConfiguration configuration)
     {
         _next = next;
         _configuration = configuration;
@@ -18,8 +16,7 @@ public class MaintenanceModeMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        var isMaintenanceMode =
-            _configuration.GetValue<bool>("MaintenanceMode:IsEnabled");
+        var isMaintenanceMode =_configuration.GetValue<bool>("MaintenanceMode:IsEnabled");
 
         if (isMaintenanceMode &&
             !context.Request.Path.StartsWithSegments("/Home"))

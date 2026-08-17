@@ -8,7 +8,6 @@ namespace FleetCarePro.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
@@ -24,14 +23,10 @@ namespace FleetCarePro.Web.Controllers
             return View();
         }
 
-        [ResponseCache(
-            Duration = 0,
-            Location = ResponseCacheLocation.None,
-            NoStore = true)]
+        [ResponseCache( Duration = 0,Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(
-                new ErrorViewModel
+            return View( new ErrorViewModel
                 {
                     RequestId =
                         Activity.Current?.Id
@@ -43,10 +38,6 @@ namespace FleetCarePro.Web.Controllers
         {
             return View();
         }
-
-        // =========================
-        // STATUS CODE
-        // =========================
 
         [HttpGet]
         public IActionResult StatusCode(int statusCode)

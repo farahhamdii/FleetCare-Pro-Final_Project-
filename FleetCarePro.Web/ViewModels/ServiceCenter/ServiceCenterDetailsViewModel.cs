@@ -14,6 +14,5 @@ public class ServiceCenterDetailsViewModel
 
     public bool IsActive { get; set; }
 
-    public List<string> ServiceCategories { get; set; }
-        = new List<string>();
+    public List<string> ServiceCategories { get; set; } = new List<string>();
 }

@@ -59,12 +59,8 @@ public static class UserSeeder
 
         if (!result.Succeeded)
         {
-            var errors = string.Join(
-                ", ",
-                result.Errors.Select(e => e.Description));
-
-            throw new Exception(
-                $"Failed to create {role} user: {errors}");
+            var errors = string.Join( ", ", result.Errors.Select(e => e.Description));
+            throw new Exception(  $"Failed to create {role} user: {errors}");
         }
 
         await userManager.AddToRoleAsync(user, role);

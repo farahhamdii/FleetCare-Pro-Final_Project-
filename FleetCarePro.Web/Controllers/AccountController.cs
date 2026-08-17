@@ -11,9 +11,7 @@ public class AccountController : Controller
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
 
-    public AccountController(
-        UserManager<ApplicationUser> userManager,
-        SignInManager<ApplicationUser> signInManager)
+    public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -49,10 +47,7 @@ public class AccountController : Controller
         if (result.Succeeded)
             return RedirectToAction("Index", "Dashboard");
 
-        ModelState.AddModelError(
-            string.Empty,
-            "Invalid email or password.");
-
+        ModelState.AddModelError(string.Empty,"Invalid email or password.");
         return View(model);
     }
 
@@ -62,7 +57,6 @@ public class AccountController : Controller
     public async Task<IActionResult> Logout()
     {
         await _signInManager.SignOutAsync();
-
         return RedirectToAction("Index", "Home");
     }
 

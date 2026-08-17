@@ -5,9 +5,7 @@ namespace FleetCarePro.Web.Validation;
 
 public class ValidVINAttribute : ValidationAttribute
 {
-    protected override ValidationResult? IsValid(
-        object? value,
-        ValidationContext validationContext)
+    protected override ValidationResult? IsValid(object? value,ValidationContext validationContext)
     {
         if (value is not string vin || string.IsNullOrWhiteSpace(vin))
             return new ValidationResult("VIN is required.");

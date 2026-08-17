@@ -40,115 +40,49 @@ public class DashboardController : Controller
             WelcomeMessage = $"Welcome, {User.Identity?.Name}"
         };
 
-        // =========================
-        // ADMIN
-        // =========================
-
         if (User.IsInRole("Admin"))
         {
-            var admins =
-                await _userManager.GetUsersInRoleAsync("Admin");
+            var admins =await _userManager.GetUsersInRoleAsync("Admin");
+            var managers =await _userManager.GetUsersInRoleAsync("FleetManager");
+            var drivers =await _userManager.GetUsersInRoleAsync("Driver");
+            model.TotalUsers = admins.Count + managers.Count +drivers.Count;
+            var vehicles = await _vehicleService.GetAllAsync();
+            var centers = await _serviceCenterService.GetAllAsync();
+            var records = await _serviceRecordService.GetAllAsync();
+            var categories =await _serviceCategoryService.GetAllAsync();
 
-            var managers =
-                await _userManager.GetUsersInRoleAsync("FleetManager");
-
-            var drivers =
-                await _userManager.GetUsersInRoleAsync("Driver");
-
-            model.TotalUsers =
-                admins.Count +
-                managers.Count +
-                drivers.Count;
-
-            var vehicles =
-                await _vehicleService.GetAllAsync();
-
-            var centers =
-                await _serviceCenterService.GetAllAsync();
-
-            var records =
-                await _serviceRecordService.GetAllAsync();
-
-            var categories =
-                await _serviceCategoryService.GetAllAsync();
-
-            model.TotalVehicles =
-                vehicles.Count();
-
-            model.TotalServiceCenters =
-                centers.Count();
-
-            model.TotalServiceRecords =
-                records.Count();
-
-            model.TotalServiceCategories =
-                categories.Count();
-
-            model.PendingServices =
-                records.Count(x =>
+            model.TotalVehicles = vehicles.Count();
+            model.TotalServiceCenters = centers.Count();
+            model.TotalServiceRecords =records.Count();
+            model.TotalServiceCategories = categories.Count();
+            model.PendingServices = records.Count(x =>
                     x.Status == ServiceRecordStatus.Pending);
-
-            model.ApprovedServices =
-                records.Count(x =>
+            model.ApprovedServices =records.Count(x =>
                     x.Status == ServiceRecordStatus.Approved);
-
-            model.CompletedServices =
-                records.Count(x =>
+            model.CompletedServices =records.Count(x =>
                     x.Status == ServiceRecordStatus.Completed);
-
-            model.CancelledServices =
-                records.Count(x =>
+            model.CancelledServices =records.Count(x =>
                     x.Status == ServiceRecordStatus.Cancelled);
         }
-
-        // =========================
-        // FLEET MANAGER
-        // =========================
 
         else if (User.IsInRole("FleetManager"))
         {
-            var vehicles =
-                await _vehicleService.GetAllAsync();
+            var vehicles = await _vehicleService.GetAllAsync();
+            var centers = await _serviceCenterService.GetAllAsync();
+            var records = await _serviceRecordService.GetAllAsync();
 
-            var centers =
-                await _serviceCenterService.GetAllAsync();
-
-            var records =
-                await _serviceRecordService.GetAllAsync();
-
-            model.TotalVehicles =
-                vehicles.Count();
-
-            model.TotalServiceCenters =
-                centers.Count();
-
-            model.TotalServiceRecords =
-                records.Count();
-
-            // =========================
-            // SERVICE STATUS COUNTS
-            // =========================
-
-            model.PendingServices =
-                records.Count(x =>
+            model.TotalVehicles =vehicles.Count();
+            model.TotalServiceCenters =centers.Count();
+            model.TotalServiceRecords =records.Count();
+            model.PendingServices = records.Count(x =>
                     x.Status == ServiceRecordStatus.Pending);
-
-            model.ApprovedServices =
-                records.Count(x =>
+            model.ApprovedServices = records.Count(x =>
                     x.Status == ServiceRecordStatus.Approved);
-
-            model.CompletedServices =
-                records.Count(x =>
+            model.CompletedServices = records.Count(x =>
                     x.Status == ServiceRecordStatus.Completed);
-
-            model.CancelledServices =
-                records.Count(x =>
+            model.CancelledServices =records.Count(x =>
                     x.Status == ServiceRecordStatus.Cancelled);
         }
-
-        // =========================
-        // DRIVER
-        // =========================
 
         else if (User.IsInRole("Driver"))
         {

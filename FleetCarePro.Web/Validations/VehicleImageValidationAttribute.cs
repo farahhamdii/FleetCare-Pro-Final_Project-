@@ -14,9 +14,7 @@ public class VehicleImageValidationAttribute : ValidationAttribute
         ".png"
     };
 
-    protected override ValidationResult? IsValid(
-        object? value,
-        ValidationContext validationContext)
+    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
         if (value == null)
             return ValidationResult.Success;

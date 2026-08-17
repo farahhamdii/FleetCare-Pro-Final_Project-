@@ -45,9 +45,6 @@
     {
         <div class="app-shell">
 
-            <!-- ========================= -->
-            <!-- Sidebar -->
-            <!-- ========================= -->
 
             <aside class="app-sidebar" id="appSidebar">
 
@@ -190,10 +187,6 @@
 
                     }
 
-
-                    <!-- ========================= -->
-                    <!-- FLEET MANAGER -->
-                    <!-- ========================= -->
                     @if (User.IsInRole("FleetManager"))
                     {
                         <div class="sidebar-section-label">
@@ -278,9 +271,6 @@
                     }
 
 
-                    <!-- ========================= -->
-                    <!-- DRIVER -->
-                    <!-- ========================= -->
                     @if (User.IsInRole("Driver"))
                     {
                         <div class="sidebar-section-label">
@@ -360,16 +350,8 @@
         </div>
 
 
-        <!-- ========================= -->
-        <!-- Main -->
-        <!-- ========================= -->
 
         <div class="app-main">
-
-
-            <!-- ========================= -->
-            <!-- Header -->
-            <!-- ========================= -->
 
             <header class="app-topbar">
 
@@ -487,16 +469,9 @@
         }
     else
     {
-        <!-- ========================= -->
-        <!-- Unauthenticated Pages -->
-        <!-- ========================= -->
         @RenderBody()
     }
 
-
-    <!-- ========================= -->
-    <!-- Scripts -->
-    <!-- ========================= -->
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
 

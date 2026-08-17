@@ -8,8 +8,7 @@ public class OverdueMaintenanceViewComponent : ViewComponent
 {
     private readonly IServiceRecordService _serviceRecordService;
 
-    public OverdueMaintenanceViewComponent(
-        IServiceRecordService serviceRecordService)
+    public OverdueMaintenanceViewComponent(IServiceRecordService serviceRecordService)
     {
         _serviceRecordService = serviceRecordService;
     }
@@ -18,8 +17,7 @@ public class OverdueMaintenanceViewComponent : ViewComponent
     {
         var records = await _serviceRecordService.GetAllAsync();
         var sixMonthsAgo = DateTime.UtcNow.Date.AddMonths(-6);
-        var overdueVehicles = records
-         .GroupBy(x => new
+        var overdueVehicles = records .GroupBy(x => new
          {
              x.VehicleId,
              x.VehicleLicensePlate
