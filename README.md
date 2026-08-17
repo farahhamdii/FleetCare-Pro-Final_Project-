@@ -1,4 +1,4 @@
-# 🚗 FleetCare Pro
+#  FleetCare Pro
 
 ### Vehicle Fleet & Maintenance Management System
 
