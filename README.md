@@ -1083,57 +1083,6 @@ For an API version, the technology stack could include:
 
 ---
 
-# 📈 Production Roadmap
-
-The project can be further hardened toward production with:
-
-### Security
-
-* [ ] Complete authentication flow
-* [ ] Refresh tokens for API
-* [ ] Claims-based authorization
-* [ ] Password policy hardening
-* [ ] Account lockout
-* [ ] Email confirmation
-* [ ] Secure file upload handling
-* [ ] Rate limiting
-
-### Reliability
-
-* [ ] Global exception handling
-* [ ] Structured logging
-* [ ] Health checks
-* [ ] Transaction management
-* [ ] Consistent error responses
-
-### Performance
-
-* [ ] Pagination
-* [ ] Server-side filtering
-* [ ] Search optimization
-* [ ] `AsNoTracking()` where appropriate
-* [ ] Query projections
-* [ ] Database indexes
-* [ ] Caching
-
-### Observability
-
-* [ ] Serilog
-* [ ] Application monitoring
-* [ ] Request logging
-* [ ] Audit logging improvements
-* [ ] Error tracking
-
-### DevOps
-
-* [ ] Docker
-* [ ] CI/CD pipeline
-* [ ] GitHub Actions
-* [ ] Environment-specific configuration
-* [ ] Production secrets management
-* [ ] Cloud deployment
-
----
 
 # 📚 Learning Outcomes
 
