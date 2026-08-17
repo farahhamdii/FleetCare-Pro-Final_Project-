@@ -1,0 +1,501 @@
+﻿@model FleetCarePro.Web.ViewModels.ServiceRecord.CreateServiceRecordViewModel
+
+@{
+    ViewData["Title"] = "Create Service Record";
+}
+
+<div class="container mt-4">
+
+    <div class="mb-4">
+        <h2 class="fw-bold">
+            <i class="bi bi-wrench-adjustable me-2"></i>
+            Create Service Record
+        </h2>
+
+        <p class="text-muted">
+            Create a new maintenance record for a vehicle.
+        </p>
+    </div>
+
+    <form asp-action="Create"
+          method="post"
+          enctype="multipart/form-data">
+
+        @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="ModelOnly"
+             class="alert alert-danger">
+        </div>
+
+
+        <!-- SERVICE INFORMATION -->
+
+        <div class="card shadow-sm mb-4">
+
+            <div class="card-header">
+                <h5 class="mb-0">
+                    Service Information
+                </h5>
+            </div>
+
+            <div class="card-body">
+
+                <div class="row">
+
+                    <!-- Vehicle -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="VehicleId"
+                               class="form-label">
+                            Vehicle
+                        </label>
+
+                        <select asp-for="VehicleId"
+                                asp-items="ViewBag.Vehicles"
+                                class="form-select">
+
+                            <option value="">
+                                -- Select Vehicle --
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="VehicleId"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Service Center -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="ServiceCenterId"
+                               class="form-label">
+                            Service Center
+                        </label>
+
+                        <select asp-for="ServiceCenterId"
+                                asp-items="ViewBag.ServiceCenters"
+                                class="form-select">
+
+                            <option value="">
+                                -- Select Service Center --
+                            </option>
+
+                        </select>
+
+                        <span asp-validation-for="ServiceCenterId"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Service Date -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="ServiceDate"
+                               class="form-label">
+                            Service Date
+                        </label>
+
+                        <input asp-for="ServiceDate"
+                               type="date"
+                               class="form-control" />
+
+                        <span asp-validation-for="ServiceDate"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Mileage -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="CurrentMileage"
+                               class="form-label">
+                            Current Mileage
+                        </label>
+
+                        <input asp-for="CurrentMileage"
+                               type="number"
+                               min="0"
+                               class="form-control"
+                               placeholder="Enter current mileage" />
+
+                        <span asp-validation-for="CurrentMileage"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Status -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="Status"
+                               class="form-label">
+                            Status
+                        </label>
+
+                        <select asp-for="Status"
+                                asp-items="Html.GetEnumSelectList<FleetCarePro.Domain.Enums.ServiceRecordStatus>()"
+                                class="form-select">
+                        </select>
+
+                        <span asp-validation-for="Status"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Invoice -->
+
+                    <div class="col-md-6 mb-3">
+
+                        <label asp-for="InvoiceFile"
+                               class="form-label">
+                            Invoice Document
+                        </label>
+
+                        <input asp-for="InvoiceFile"
+                               type="file"
+                               class="form-control"
+                               accept=".pdf,.jpg,.jpeg,.png" />
+
+                        <div class="form-text">
+                            Allowed files: PDF, JPG, JPEG, PNG. Maximum size: 5 MB.
+                        </div>
+
+                        <span asp-validation-for="InvoiceFile"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Notes -->
+
+                    <div class="col-12 mb-3">
+
+                        <label asp-for="Notes"
+                               class="form-label">
+                            Notes
+                        </label>
+
+                        <textarea asp-for="Notes"
+                                  class="form-control"
+                                  rows="4"
+                                  placeholder="Add notes about this service..."></textarea>
+
+                        <span asp-validation-for="Notes"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SERVICE LINE ITEMS -->
+
+        <div class="card shadow-sm mb-4">
+
+            <div class="card-header d-flex justify-content-between align-items-center">
+
+                <h5 class="mb-0">
+                    Service Items
+                </h5>
+
+                <button type="button"
+                        id="addItem"
+                        class="btn btn-sm btn-success">
+
+                    <i class="bi bi-plus-lg"></i>
+                    Add Service
+
+                </button>
+
+            </div>
+
+
+            <div class="card-body">
+
+                <div id="serviceItems">
+
+                    <!-- First Item -->
+
+                    <div class="service-item border rounded p-3 mb-3">
+
+                        <div class="row align-items-end">
+
+                            <!-- Category -->
+
+                            <div class="col-md-4 mb-3">
+
+                                <label class="form-label">
+                                    Service Category
+                                </label>
+
+                                <select name="ServiceLineItems[0].ServiceCategoryId"
+                                        class="form-select">
+
+                                    <option value="">
+                                        -- Select Category --
+                                    </option>
+
+                                    @foreach (var category in (IEnumerable<SelectListItem>)ViewBag.ServiceCategories)
+                                    {
+                                        <option value="@category.Value">
+                                            @category.Text
+                                        </option>
+                                    }
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- Description -->
+
+                            <div class="col-md-4 mb-3">
+
+                                <label class="form-label">
+                                    Description
+                                </label>
+
+                                <input name="ServiceLineItems[0].Description"
+                                       class="form-control"
+                                       placeholder="Describe the service" />
+
+                            </div>
+
+
+                            <!-- Cost -->
+
+                            <div class="col-md-3 mb-3">
+
+                                <label class="form-label">
+                                    Cost
+                                </label>
+
+                                <input name="ServiceLineItems[0].Cost"
+                                       type="number"
+                                       min="0"
+                                       step="0.01"
+                                       class="form-control"
+                                       placeholder="0.00" />
+
+                            </div>
+
+
+                            <!-- Remove -->
+
+                            <div class="col-md-1 mb-3">
+
+                                <button type="button"
+                                        class="btn btn-danger remove-item"
+                                        style="display:none;">
+
+                                    <i class="bi bi-trash"></i>
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="d-flex justify-content-end gap-2 mb-5">
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+
+                Cancel
+
+            </a>
+
+            <button type="submit"
+                    class="btn btn-primary">
+
+                <i class="bi bi-check-lg me-1"></i>
+                Create Service Record
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        let itemIndex = 1;
+
+        const addItemButton =
+            document.getElementById("addItem");
+
+        const serviceItems =
+            document.getElementById("serviceItems");
+
+
+        addItemButton.addEventListener("click", function () {
+
+            const item = document.createElement("div");
+
+            item.className =
+                "service-item border rounded p-3 mb-3";
+
+            item.innerHTML = `
+                <div class="row align-items-end">
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Service Category
+                        </label>
+
+                        <select name="ServiceLineItems[${itemIndex}].ServiceCategoryId"
+                                class="form-select">
+
+                            <option value="">
+                                -- Select Category --
+                            </option>
+
+                            @foreach (var category in (IEnumerable<SelectListItem>)ViewBag.ServiceCategories)
+                            {
+                                        <option value="@category.Value">
+                                            @category.Text
+                                        </option>
+                            }
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Description
+                        </label>
+
+                        <input name="ServiceLineItems[${itemIndex}].Description"
+                               class="form-control"
+                               placeholder="Describe the service" />
+
+                    </div>
+
+
+                    <div class="col-md-3 mb-3">
+
+                        <label class="form-label">
+                            Cost
+                        </label>
+
+                        <input name="ServiceLineItems[${itemIndex}].Cost"
+                               type="number"
+                               min="0"
+                               step="0.01"
+                               class="form-control"
+                               placeholder="0.00" />
+
+                    </div>
+
+
+                    <div class="col-md-1 mb-3">
+
+                        <button type="button"
+                                class="btn btn-danger remove-item">
+
+                            <i class="bi bi-trash"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+            `;
+
+            serviceItems.appendChild(item);
+
+            updateRemoveButtons();
+
+            itemIndex++;
+
+        });
+
+
+        function updateRemoveButtons() {
+
+            const items =
+                document.querySelectorAll(".service-item");
+
+            items.forEach(function (item) {
+
+                const removeButton =
+                    item.querySelector(".remove-item");
+
+                if (items.length > 1) {
+
+                    removeButton.style.display =
+                        "block";
+
+                }
+                else {
+
+                    removeButton.style.display =
+                        "none";
+
+                }
+
+            });
+        }
+
+
+        document.addEventListener("click", function (event) {
+
+            if (event.target.closest(".remove-item")) {
+
+                const item =
+                    event.target.closest(".service-item");
+
+                item.remove();
+
+                updateRemoveButtons();
+
+            }
+
+        });
+
+    </script>
+
+}

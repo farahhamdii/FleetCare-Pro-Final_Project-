@@ -1,0 +1,74 @@
+﻿@model IEnumerable<dynamic>
+
+<div class="dashboard-panel overdue-panel">
+
+    <div class="panel-header">
+
+        <div class="panel-heading">
+
+            <div class="panel-icon overdue-icon">
+                <i class="bi bi-exclamation-triangle"></i>
+            </div>
+
+            <div>
+                <h5>Overdue Maintenance</h5>
+                <span>Vehicles not serviced in the last 6 months</span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    @if (!Model.Any())
+    {
+        <div class="panel-empty">
+
+            <i class="bi bi-check-circle-fill"></i>
+
+            <div>
+                <strong>All vehicles are up to date</strong>
+
+                <small>
+                    No vehicles are overdue for maintenance.
+                </small>
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <div class="overdue-list">
+
+            @foreach (var vehicle in Model)
+            {
+                <div class="overdue-item">
+
+                    <div class="vehicle-info">
+
+                        <i class="bi bi-car-front-fill"></i>
+
+                        <div>
+                            <strong>
+                                @vehicle.VehicleLicensePlate
+                            </strong>
+
+                            <small>
+                                Last service:
+                                @vehicle.LastServiceDate.ToString("dd/MM/yyyy")
+                            </small>
+                        </div>
+
+                    </div>
+
+                    <span class="overdue-label">
+                        Overdue
+                    </span>
+
+                </div>
+            }
+
+        </div>
+    }
+
+</div>

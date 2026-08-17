@@ -1,0 +1,635 @@
+﻿
+@model FleetCarePro.Web.ViewModels.Account.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="login-page">
+
+    <div class="login-background">
+        <div class="login-glow login-glow-one"></div>
+        <div class="login-glow login-glow-two"></div>
+    </div>
+
+    <div class="login-wrapper">
+
+        <!-- Brand Side -->
+        <div class="login-brand-section">
+
+            <div class="brand-logo">
+                <i class="bi bi-truck-front-fill"></i>
+            </div>
+
+            <h1>
+                FleetCare <span>Pro</span>
+            </h1>
+
+            <p>
+                Smart vehicle maintenance management
+                for modern fleet operations.
+            </p>
+
+            <div class="brand-features">
+
+                <div class="brand-feature">
+                    <span>
+                        <i class="bi bi-check2"></i>
+                    </span>
+                    <div>
+                        <strong>Fleet Management</strong>
+                        <small>Manage your vehicles efficiently</small>
+                    </div>
+                </div>
+
+                <div class="brand-feature">
+                    <span>
+                        <i class="bi bi-check2"></i>
+                    </span>
+                    <div>
+                        <strong>Maintenance Tracking</strong>
+                        <small>Keep every service record organized</small>
+                    </div>
+                </div>
+
+                <div class="brand-feature">
+                    <span>
+                        <i class="bi bi-check2"></i>
+                    </span>
+                    <div>
+                        <strong>Secure Access</strong>
+                        <small>Role-based access for your team</small>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Login Card -->
+        <div class="login-card">
+
+            <div class="login-header">
+
+                <div class="mobile-logo">
+                    <i class="bi bi-truck-front-fill"></i>
+                </div>
+
+                <h2>Welcome Back</h2>
+
+                <p>
+                    Sign in to continue to your dashboard
+                </p>
+
+            </div>
+
+
+            <form asp-action="Login" method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="alert alert-danger"
+                     role="alert">
+                </div>
+
+
+                <!-- Email -->
+
+                <div class="form-field">
+
+                    <label asp-for="Email">
+                        Email Address
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-envelope"></i>
+
+                        <input asp-for="Email"
+                               class="form-control"
+                               placeholder="Enter your email"
+                               autocomplete="email" />
+
+                    </div>
+
+                    <span asp-validation-for="Email"
+                          class="validation-message">
+                    </span>
+
+                </div>
+
+
+                <!-- Password -->
+
+                <div class="form-field">
+
+                    <div class="password-label">
+
+                        <label asp-for="Password">
+                            Password
+                        </label>
+
+                    </div>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-lock"></i>
+
+                        <input asp-for="Password"
+                               class="form-control"
+                               placeholder="Enter your password"
+                               autocomplete="current-password" />
+
+                    </div>
+
+                    <span asp-validation-for="Password"
+                          class="validation-message">
+                    </span>
+
+                </div>
+
+
+                <!-- Remember Me -->
+
+                <div class="remember-row">
+
+                    <div class="form-check">
+
+                        <input asp-for="RememberMe"
+                               class="form-check-input" />
+
+                        <label asp-for="RememberMe"
+                               class="form-check-label">
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Login -->
+
+                <button type="submit"
+                        class="login-btn">
+
+                    <span>
+                        Sign In
+                    </span>
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </button>
+
+            </form>
+
+
+            <div class="login-footer">
+
+                <div class="security-note">
+
+                    <i class="bi bi-shield-check"></i>
+
+                    <span>
+                        Your connection is secure
+                    </span>
+
+                </div>
+
+                <span>
+                    FleetCare Pro &copy; @DateTime.Now.Year
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+
+    /* =========================
+           PAGE
+           ========================= */
+
+    .login-page {
+        min-height: 100vh;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 50px 20px;
+        background: #f5f7fb;
+    }
+
+
+    /* =========================
+           BACKGROUND
+           ========================= */
+
+    .login-background {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    .login-glow {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: .45;
+    }
+
+    .login-glow-one {
+        width: 350px;
+        height: 350px;
+        background: rgba(37, 99, 235, .12);
+        top: -120px;
+        left: -100px;
+    }
+
+    .login-glow-two {
+        width: 400px;
+        height: 400px;
+        background: rgba(59, 130, 246, .10);
+        bottom: -180px;
+        right: -120px;
+    }
+
+
+    /* =========================
+           WRAPPER
+           ========================= */
+
+    .login-wrapper {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        max-width: 1050px;
+        display: grid;
+        grid-template-columns: 1fr 460px;
+        align-items: center;
+        gap: 70px;
+    }
+
+
+    /* =========================
+           BRAND
+           ========================= */
+
+    .login-brand-section {
+        padding: 20px;
+    }
+
+    .brand-logo {
+        width: 64px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 18px;
+        background: #2563eb;
+        color: white;
+        font-size: 28px;
+        margin-bottom: 22px;
+        box-shadow: 0 12px 25px rgba(37, 99, 235, .25);
+    }
+
+    .login-brand-section h1 {
+        font-size: 44px;
+        font-weight: 800;
+        letter-spacing: -1.5px;
+        color: #111827;
+        margin-bottom: 15px;
+    }
+
+        .login-brand-section h1 span {
+            color: #2563eb;
+        }
+
+    .login-brand-section > p {
+        max-width: 480px;
+        font-size: 17px;
+        line-height: 1.7;
+        color: #64748b;
+        margin-bottom: 35px;
+    }
+
+
+    /* =========================
+           FEATURES
+           ========================= */
+
+    .brand-features {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .brand-feature {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+        .brand-feature > span {
+            width: 34px;
+            height: 34px;
+            flex-shrink: 0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(37, 99, 235, .10);
+            color: #2563eb;
+        }
+
+        .brand-feature strong {
+            display: block;
+            font-size: 14px;
+            color: #1f2937;
+        }
+
+        .brand-feature small {
+            display: block;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+
+    /* =========================
+           LOGIN CARD
+           ========================= */
+
+    .login-card {
+        background: rgba(255, 255, 255, .96);
+        border: 1px solid #e5e7eb;
+        border-radius: 22px;
+        padding: 42px;
+        box-shadow: 0 25px 60px rgba(15, 23, 42, .10);
+    }
+
+
+    /* =========================
+           HEADER
+           ========================= */
+
+    .login-header {
+        margin-bottom: 30px;
+    }
+
+        .login-header h2 {
+            font-size: 27px;
+            font-weight: 750;
+            color: #111827;
+            margin-bottom: 7px;
+        }
+
+        .login-header p {
+            color: #64748b;
+            margin: 0;
+            font-size: 14px;
+        }
+
+    .mobile-logo {
+        display: none;
+    }
+
+
+    /* =========================
+           FORM
+           ========================= */
+
+    .form-field {
+        margin-bottom: 21px;
+    }
+
+        .form-field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 650;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+        .input-wrapper > i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 17px;
+            z-index: 2;
+            transition: .2s ease;
+        }
+
+        .input-wrapper .form-control {
+            height: 50px;
+            padding-left: 45px;
+            padding-right: 14px;
+            border: 1px solid #dbe1ea;
+            border-radius: 10px;
+            background: #fff;
+            color: #1f2937;
+            transition: .2s ease;
+        }
+
+            .input-wrapper .form-control::placeholder {
+                color: #a1aab8;
+            }
+
+            .input-wrapper .form-control:focus {
+                border-color: #2563eb;
+                box-shadow: 0 0 0 4px rgba(37, 99, 235, .09);
+            }
+
+        .input-wrapper:focus-within > i {
+            color: #2563eb;
+        }
+
+
+    /* =========================
+           VALIDATION
+           ========================= */
+
+    .validation-message {
+        display: block;
+        margin-top: 6px;
+        color: #dc2626;
+        font-size: 12px;
+    }
+
+    .login-card .alert-danger {
+        border: none;
+        border-radius: 10px;
+        font-size: 13px;
+        padding: 11px 13px;
+        margin-bottom: 20px;
+    }
+
+
+    /* =========================
+           REMEMBER
+           ========================= */
+
+    .remember-row {
+        margin-top: -2px;
+        margin-bottom: 24px;
+    }
+
+    .form-check {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .form-check-input {
+        width: 17px;
+        height: 17px;
+        cursor: pointer;
+    }
+
+        .form-check-input:checked {
+            background-color: #2563eb;
+            border-color: #2563eb;
+        }
+
+    .form-check-label {
+        font-size: 13px;
+        color: #64748b;
+        cursor: pointer;
+    }
+
+
+    /* =========================
+           LOGIN BUTTON
+           ========================= */
+
+    .login-btn {
+        width: 100%;
+        height: 51px;
+        border: none;
+        border-radius: 10px;
+        background: #2563eb;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-size: 14px;
+        font-weight: 650;
+        cursor: pointer;
+        transition: .2s ease;
+        box-shadow: 0 8px 18px rgba(37, 99, 235, .18);
+    }
+
+        .login-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 11px 23px rgba(37, 99, 235, .25);
+        }
+
+        .login-btn i {
+            transition: transform .2s ease;
+        }
+
+        .login-btn:hover i {
+            transform: translateX(3px);
+        }
+
+
+    /* =========================
+           FOOTER
+           ========================= */
+
+    .login-footer {
+        margin-top: 27px;
+        padding-top: 20px;
+        border-top: 1px solid #eef0f4;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        color: #9aa4b2;
+        font-size: 11px;
+    }
+
+    .security-note {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+        .security-note i {
+            color: #16a34a;
+            font-size: 14px;
+        }
+
+
+    /* =========================
+           RESPONSIVE
+           ========================= */
+
+    @@media (max-width: 900px) {
+
+        .login-wrapper {
+            max-width: 520px;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        .login-brand-section {
+            display: none;
+        }
+
+        .mobile-logo {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 18px;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(37, 99, 235, .10);
+            color: #2563eb;
+            font-size: 22px;
+        }
+    }
+
+
+    @@media (max-width: 576px) {
+
+        .login-page {
+            padding: 25px 15px;
+        }
+
+        .login-card {
+            padding: 30px 23px;
+            border-radius: 18px;
+        }
+
+        .login-header h2 {
+            font-size: 24px;
+        }
+
+        .login-footer {
+            flex-direction: column;
+            justify-content: center;
+        }
+    }
+
+</style>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

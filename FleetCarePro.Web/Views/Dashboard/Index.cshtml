@@ -1,0 +1,680 @@
+﻿
+@model FleetCarePro.Web.ViewModels.Dashboard.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="dashboard-page">
+
+    <!-- =========================
+         DASHBOARD HEADER
+         ========================= -->
+
+    <div class="dashboard-header mb-4">
+
+        <div>
+            <span class="dashboard-eyebrow">
+                FLEETCARE PRO
+            </span>
+
+            <h1 class="dashboard-title">
+                Welcome back 👋
+            </h1>
+
+            <p class="dashboard-subtitle">
+                Here's what's happening with your fleet today.
+            </p>
+        </div>
+
+        <div class="dashboard-date">
+            <i class="bi bi-calendar3"></i>
+            @DateTime.Today.ToString("dddd, dd MMMM yyyy")
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ADMIN DASHBOARD
+         ===================================================== -->
+    @if (User.IsInRole("Admin"))
+    {
+        <!-- Main Statistics -->
+
+        <div class="row g-4 mb-4">
+
+            <!-- Vehicles -->
+
+            <div class="col-md-6 col-xl-3">
+                <div class="dashboard-stat-card vehicles-card">
+
+                    <div class="stat-top">
+                        <div>
+                            <span class="stat-label">
+                                Total Vehicles
+                            </span>
+
+                            <h2 class="stat-number">
+                                @Model.TotalVehicles
+                            </h2>
+                        </div>
+
+                        <div class="stat-icon">
+                            <i class="bi bi-car-front-fill"></i>
+                        </div>
+                    </div>
+
+                    <a asp-controller="Vehicle"
+                       asp-action="Index"
+                       class="stat-link">
+                        View Vehicles
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+
+                </div>
+
+            </div>
+    
+
+            <!-- Service Centers -->
+
+            <div class="col-md-6 col-xl-3">
+                <div class="dashboard-stat-card centers-card">
+
+                    <div class="stat-top">
+                        <div>
+                            <span class="stat-label">
+                                Service Centers
+                            </span>
+
+                            <h2 class="stat-number">
+                                @Model.TotalServiceCenters
+                            </h2>
+                        </div>
+
+                        <div class="stat-icon">
+                            <i class="bi bi-building"></i>
+                        </div>
+                    </div>
+
+                    <a asp-controller="ServiceCenter"
+                       asp-action="Index"
+                       class="stat-link">
+                        View Centers
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+            </div>
+
+
+            <!-- Categories -->
+
+            <div class="col-md-6 col-xl-3">
+                <div class="dashboard-stat-card categories-card">
+
+                    <div class="stat-top">
+                        <div>
+                            <span class="stat-label">
+                                Service Categories
+                            </span>
+
+                            <h2 class="stat-number">
+                                @Model.TotalServiceCategories
+                            </h2>
+                        </div>
+
+                        <div class="stat-icon">
+                            <i class="bi bi-tags-fill"></i>
+                        </div>
+                    </div>
+
+                    <a asp-controller="ServiceCategory"
+                       asp-action="Index"
+                       class="stat-link">
+                        View Categories
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+            </div>
+
+
+            <!-- Users -->
+
+            <div class="col-md-6 col-xl-3">
+                <div class="dashboard-stat-card users-card">
+
+                    <div class="stat-top">
+                        <div>
+                            <span class="stat-label">
+                                Total Users
+                            </span>
+
+                            <h2 class="stat-number">
+                                @Model.TotalUsers
+                            </h2>
+                        </div>
+
+                        <div class="stat-icon">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                    </div>
+
+                    <a asp-controller="Admin"
+                       asp-action="Users"
+                       class="stat-link">
+                        Manage Users
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+    
+
+
+        <!-- Service Overview -->
+
+        <div class="dashboard-section-title">
+            <div>
+                <h4>Service Overview</h4>
+                <p>Current maintenance status across the fleet</p>
+            </div>
+
+            <a asp-controller="ServiceRecord"
+               asp-action="Index"
+               class="view-all-link">
+                View all records
+                <i class="bi bi-arrow-right"></i>
+            </a>
+        </div>
+
+
+        <div class="row g-4 mb-4">
+
+            <!-- Pending -->
+
+            <div class="col-6 col-xl-3">
+                <div class="status-card pending">
+
+                    <div class="status-circle">
+                        <i class="bi bi-clock-history"></i>
+                    </div>
+
+                    <span class="status-title">
+                        Pending
+                    </span>
+
+                    <strong class="status-number">
+                        @Model.PendingServices
+                    </strong>
+
+                    <a asp-controller="ServiceRecord"
+                       asp-action="Index"
+                       asp-route-status="Pending">
+                        Review Services
+                    </a>
+
+                </div>
+            </div>
+
+
+            <!-- Approved -->
+
+            <div class="col-6 col-xl-3">
+                <div class="status-card approved">
+
+                    <div class="status-circle">
+                        <i class="bi bi-check2-circle"></i>
+                    </div>
+
+                    <span class="status-title">
+                        Approved
+                    </span>
+
+                    <strong class="status-number">
+                        @Model.ApprovedServices
+                    </strong>
+
+                    <a asp-controller="ServiceRecord"
+                       asp-action="Index"
+                       asp-route-status="Approved">
+                        View Services
+                    </a>
+
+                </div>
+            </div>
+
+
+            <!-- Completed -->
+
+            <div class="col-6 col-xl-3">
+                <div class="status-card completed">
+
+                    <div class="status-circle">
+                        <i class="bi bi-check-all"></i>
+                    </div>
+
+                    <span class="status-title">
+                        Completed
+                    </span>
+
+                    <strong class="status-number">
+                        @Model.CompletedServices
+                    </strong>
+
+                    <a asp-controller="ServiceRecord"
+                       asp-action="Index"
+                       asp-route-status="Completed">
+                        View Services
+                    </a>
+
+                </div>
+            </div>
+
+
+            <!-- Cancelled -->
+
+            <div class="col-6 col-xl-3">
+                <div class="status-card cancelled">
+
+                    <div class="status-circle">
+                        <i class="bi bi-x-circle"></i>
+                    </div>
+
+                    <span class="status-title">
+                        Cancelled
+                    </span>
+
+                    <strong class="status-number">
+                        @Model.CancelledServices
+                    </strong>
+
+                    <a asp-controller="ServiceRecord"
+                       asp-action="Index"
+                       asp-route-status="Cancelled">
+                        View Services
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="row g-4 mb-4">
+
+            <!-- Overdue Maintenance -->
+            <div class="col-md-6">
+
+                @await Component.InvokeAsync("OverdueMaintenance")
+
+            </div>
+
+
+            <!-- Fleet Cost Summary -->
+            <div class="col-md-6">
+
+                @await Component.InvokeAsync("FleetCostSummary")
+
+            </div>
+
+        </div>
+
+        <!-- Total Records -->
+
+        <div class="total-record-card">
+
+            <div class="total-record-icon">
+                <i class="bi bi-wrench-adjustable"></i>
+            </div>
+
+            <div class="total-record-content">
+
+                <span>
+                    Total Service Records
+                </span>
+
+                <strong>
+                    @Model.TotalServiceRecords
+                </strong>
+
+                <small>
+                    Maintenance transactions recorded in the system
+                </small>
+
+            </div>
+
+            <a asp-controller="ServiceRecord"
+               asp-action="Index"
+               class="total-record-btn">
+                View All Records
+                <i class="bi bi-arrow-right"></i>
+            </a>
+
+        </div>
+    }
+
+
+    <!-- =====================================================
+         FLEET MANAGER DASHBOARD
+         ===================================================== -->
+    @if (User.IsInRole("FleetManager"))
+    {
+        <!-- Main Statistics -->
+
+        <div class="row g-4 mb-4">
+
+            <div class="col-md-6 col-xl-4">
+                <div class="dashboard-stat-card vehicles-card">
+
+                    <div class="stat-top">
+                        <div>
+                            <span class="stat-label">
+                                Fleet Vehicles
+                            </span>
+
+                            <h2 class="stat-number">
+                                @Model.TotalVehicles
+                            </h2>
+                        </div>
+
+                        <div class="stat-icon">
+                            <i class="bi bi-car-front-fill"></i>
+                        </div>
+                    </div>
+
+                    <a asp-controller="Vehicle"
+                       asp-action="Index"
+                       class="stat-link">
+                        Manage Vehicles
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+            </div>
+
+
+            <div class="col-md-6 col-xl-4">
+                <div class="dashboard-stat-card centers-card">
+
+                    <div class="stat-top">
+                        <div>
+                            <span class="stat-label">
+                                Service Centers
+                            </span>
+
+                            <h2 class="stat-number">
+                                @Model.TotalServiceCenters
+                            </h2>
+                        </div>
+
+                        <div class="stat-icon">
+                            <i class="bi bi-building"></i>
+                        </div>
+                    </div>
+
+                    <a asp-controller="ServiceCenter"
+                       asp-action="Index"
+                       class="stat-link">
+                        View Centers
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+            </div>
+
+
+            <div class="col-md-6 col-xl-4">
+                <div class="dashboard-stat-card categories-card">
+
+                    <div class="stat-top">
+                        <div>
+                            <span class="stat-label">
+                                Service Categories
+                            </span>
+
+                            <h2 class="stat-number">
+                                @Model.TotalServiceCategories
+                            </h2>
+                        </div>
+
+                        <div class="stat-icon">
+                            <i class="bi bi-tags-fill"></i>
+                        </div>
+                    </div>
+
+                    <a asp-controller="ServiceCategory"
+                       asp-action="Index"
+                       class="stat-link">
+                        View Categories
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- Service Overview -->
+
+        <div class="dashboard-section-title">
+
+            <div>
+                <h4>Service Overview</h4>
+                <p>Monitor and review fleet maintenance activity</p>
+            </div>
+
+            <a asp-controller="ServiceRecord"
+               asp-action="Index"
+               class="view-all-link">
+                View all records
+                <i class="bi bi-arrow-right"></i>
+            </a>
+
+        </div>
+
+
+        <div class="row g-4 mb-4">
+
+            <div class="col-6 col-xl-3">
+                <div class="status-card pending">
+
+                    <div class="status-circle">
+                        <i class="bi bi-clock-history"></i>
+                    </div>
+
+                    <span class="status-title">
+                        Pending
+                    </span>
+
+                    <strong class="status-number">
+                        @Model.PendingServices
+                    </strong>
+
+                    <a asp-controller="ServiceRecord"
+                       asp-action="Index"
+                       asp-route-status="Pending">
+                        Review
+                    </a>
+
+                </div>
+            </div>
+
+
+            <div class="col-6 col-xl-3">
+                <div class="status-card approved">
+
+                    <div class="status-circle">
+                        <i class="bi bi-check2-circle"></i>
+                    </div>
+
+                    <span class="status-title">
+                        Approved
+                    </span>
+
+                    <strong class="status-number">
+                        @Model.ApprovedServices
+                    </strong>
+
+                    <a asp-controller="ServiceRecord"
+                       asp-action="Index"
+                       asp-route-status="Approved">
+                        View
+                    </a>
+
+                </div>
+            </div>
+
+
+            <div class="col-6 col-xl-3">
+                <div class="status-card completed">
+
+                    <div class="status-circle">
+                        <i class="bi bi-check-all"></i>
+                    </div>
+
+                    <span class="status-title">
+                        Completed
+                    </span>
+
+                    <strong class="status-number">
+                        @Model.CompletedServices
+                    </strong>
+
+                    <a asp-controller="ServiceRecord"
+                       asp-action="Index"
+                       asp-route-status="Completed">
+                        View
+                    </a>
+
+                </div>
+            </div>
+
+
+            <div class="col-6 col-xl-3">
+                <div class="status-card cancelled">
+
+                    <div class="status-circle">
+                        <i class="bi bi-x-circle"></i>
+                    </div>
+
+                    <span class="status-title">
+                        Cancelled
+                    </span>
+
+                    <strong class="status-number">
+                        @Model.CancelledServices
+                    </strong>
+
+                    <a asp-controller="ServiceRecord"
+                       asp-action="Index"
+                       asp-route-status="Cancelled">
+                        View
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="row g-4 mb-4">
+
+            <!-- Overdue Maintenance -->
+            <div class="col-md-6">
+
+                @await Component.InvokeAsync("OverdueMaintenance")
+
+            </div>
+
+
+            <!-- Fleet Cost Summary -->
+            <div class="col-md-6">
+
+                @await Component.InvokeAsync("FleetCostSummary")
+
+            </div>
+
+        </div>
+
+
+        <!-- Total Records -->
+
+        <div class="total-record-card">
+
+            <div class="total-record-icon">
+                <i class="bi bi-wrench-adjustable"></i>
+            </div>
+
+            <div class="total-record-content">
+
+                <span>
+                    Total Service Records
+                </span>
+
+                <strong>
+                    @Model.TotalServiceRecords
+                </strong>
+
+                <small>
+                    Maintenance transactions recorded in the system
+                </small>
+
+            </div>
+
+            <a asp-controller="ServiceRecord"
+               asp-action="Index"
+               class="total-record-btn">
+                View All Records
+                <i class="bi bi-arrow-right"></i>
+            </a>
+
+        </div>
+    }
+
+
+    <!-- =====================================================
+         DRIVER DASHBOARD
+         ===================================================== -->
+    @if (User.IsInRole("Driver"))
+    {
+        <div class="row justify-content-center">
+
+            <div class="col-md-6 col-xl-4">
+
+                <div class="driver-card">
+
+                    <div class="driver-card-icon">
+                        <i class="bi bi-car-front-fill"></i>
+                    </div>
+
+                    <span>
+                        My Assigned Vehicles
+                    </span>
+
+                    <strong>
+                        @Model.AssignedVehicles
+                    </strong>
+
+                    <p>
+                        Vehicles currently assigned to you.
+                    </p>
+
+                    <a asp-controller="Vehicle"
+                       asp-action="Index"
+                       class="driver-card-btn">
+                        View My Vehicles
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+</div>
+

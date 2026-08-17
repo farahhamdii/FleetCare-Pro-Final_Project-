@@ -1,0 +1,47 @@
+﻿@model decimal
+
+<div class="dashboard-panel cost-panel">
+
+    <div class="panel-header">
+
+        <div class="panel-heading">
+
+            <div class="panel-icon cost-icon">
+                <i class="bi bi-cash-stack"></i>
+            </div>
+
+            <div>
+                <h5>Fleet Cost</h5>
+                <span>Maintenance spending this month</span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="cost-summary">
+
+        <span>Total Maintenance Cost</span>
+
+        <strong>
+            @Model.ToString("N2")
+        </strong>
+
+        <small>
+            Current month
+        </small>
+
+    </div>
+
+
+    <a asp-controller="ServiceRecord"
+       asp-action="Index"
+       class="panel-link">
+
+        View Service Records
+        <i class="bi bi-arrow-right"></i>
+
+    </a>
+
+</div>

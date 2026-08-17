@@ -1,0 +1,129 @@
+﻿```cshtml
+@model FleetCarePro.Web.ViewModels.Vehicle.VehicleDetailsViewModel
+@using FleetCarePro.Domain.Enums
+
+@{
+    ViewData["Title"] = $"{Model.Make} {Model.Model} Details";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+        <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+            <h4 class="mb-0"><i class="bi bi-info-circle me-2"></i>Vehicle Details</h4>
+
+            <div>
+                @if (User.IsInRole("Admin") || User.IsInRole("FleetManager"))
+                {
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">
+                        <i class="bi bi-pencil"></i> Edit
+                    </a>
+                }
+
+                <a asp-action="Index" class="btn btn-outline-light btn-sm">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </div>
+
+        <div class="card-body p-4">
+            <div class="row g-4">
+
+                <!-- Vehicle Image -->
+                <div class="col-md-5 text-center">
+                    @if (!string.IsNullOrEmpty(Model.VehicleImageURL))
+                    {
+                        <img src="@Model.VehicleImageURL"
+                             alt="@Model.Make @Model.Model"
+                             class="img-fluid rounded shadow-sm w-100 object-fit-cover"
+                             style="max-height: 320px;" />
+                    }
+                    else
+                    {
+                        <div class="bg-light rounded d-flex align-items-center justify-content-center text-muted"
+                             style="height: 280px;">
+                            <i class="bi bi-car-front display-1"></i>
+                        </div>
+                    }
+                </div>
+
+                <!-- Info Table -->
+                <div class="col-md-7">
+                    <h3 class="fw-bold text-primary mb-3">
+                        @Model.Make @Model.Model
+                        <span class="text-muted">(@Model.Year)</span>
+                    </h3>
+
+                    <table class="table table-borderless">
+                        <tbody>
+
+                            <tr>
+                                <th class="ps-0 text-muted" style="width: 35%;">VIN:</th>
+                                <td class="fw-bold">@Model.VIN</td>
+                            </tr>
+
+                            <tr>
+                                <th class="ps-0 text-muted">License Plate:</th>
+                                <td>
+                                    <span class="badge bg-light text-dark border fs-6">
+                                        @Model.LicensePlate
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th class="ps-0 text-muted">Status:</th>
+                                <td>
+                                    @switch (Model.Status)
+                                    {
+                                        case VehicleStatus.Active:
+                                            <span class="badge bg-success">Active</span>
+                                            break;
+
+                                        case VehicleStatus.InService:
+                                            <span class="badge bg-warning text-dark">In Service</span>
+                                            break;
+
+                                        case VehicleStatus.Decommissioned:
+                                            <span class="badge bg-danger">Decommissioned</span>
+                                            break;
+                                    }
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th class="ps-0 text-muted">Current Mileage:</th>
+                                <td class="fw-semibold">
+                                    @Model.Mileage.ToString("N0") km
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th class="ps-0 text-muted">Purchase Price:</th>
+                                <td class="fw-semibold">
+                                    $@Model.PurchasePrice.ToString("N2")
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th class="ps-0 text-muted">Assigned Driver:</th>
+                                <td class="fw-semibold">
+                                    @if (!string.IsNullOrEmpty(Model.DriverName))
+                                    {
+                                        <span>@Model.DriverName</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Unassigned</span>
+                                    }
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+```

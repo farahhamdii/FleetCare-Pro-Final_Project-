@@ -1,0 +1,41 @@
+﻿@model IEnumerable<FleetCarePro.Web.ViewModels.Vehicle.VehicleListViewModel>
+
+@{
+    ViewData["Title"] = "Vehicles";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Fleet Vehicles</h2>
+        @if (User.IsInRole("Admin") || User.IsInRole("FleetManager"))
+        {
+            <a asp-controller="Vehicle" asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> Add New Vehicle
+            </a>
+        }
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row">
+        @if (!Model.Any())
+        {
+            <div class="col-12 text-center py-5 text-muted">
+                <h4>No vehicles found.</h4>
+            </div>
+        }
+        else
+        {
+            @foreach (var vehicle in Model)
+            {
+                <partial name="_VehicleCard" model="vehicle" />
+            }
+        }
+    </div>
+</div>

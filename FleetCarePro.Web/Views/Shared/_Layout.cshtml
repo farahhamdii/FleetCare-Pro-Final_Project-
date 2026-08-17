@@ -1,0 +1,574 @@
+﻿@{
+    var currentController =
+        ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+
+    Func<string, bool> isActive = (ctrl) =>
+        string.Equals(
+            currentController,
+            ctrl,
+            StringComparison.OrdinalIgnoreCase);
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>
+        @ViewData["Title"] - FleetCare 
+    </title>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/dashboard.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/FleetCarePro.Web.styles.css"
+          asp-append-version="true" />
+</head>
+
+<body>
+
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <div class="app-shell">
+
+            <!-- ========================= -->
+            <!-- Sidebar -->
+            <!-- ========================= -->
+
+            <aside class="app-sidebar" id="appSidebar">
+
+                <!-- Brand -->
+                <a class="sidebar-brand"
+                   asp-controller="Dashboard"
+                   asp-action="Index">
+
+                    <span class="brand-icon">
+                        <i class="bi bi-truck"></i>
+                    </span>
+
+                    <span>FleetCare Pro</span>
+
+                </a>
+
+
+                <!-- Navigation -->
+                <nav class="flex-grow-1 py-2">
+
+                    <!-- ========================= -->
+                    <!-- ADMIN -->
+                    <!-- ========================= -->
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="sidebar-section-label">
+                            General
+                        </div>
+
+                        <ul class="nav flex-column">
+
+                            <!-- Dashboard -->
+                            <li class="nav-item">
+
+                                <a class="nav-link @(isActive("Dashboard") ? "active" : "")"
+                                   asp-controller="Dashboard"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-grid-1x2-fill"></i>
+                                    Dashboard
+
+                                </a>
+
+                            </li>
+
+
+                            <!-- Vehicles -->
+                            <li class="nav-item">
+
+                                <a class="nav-link @(isActive("Vehicle") ? "active" : "")"
+                                   asp-controller="Vehicle"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-car-front-fill"></i>
+                                    Vehicles
+
+                                </a>
+
+                            </li>
+
+
+                            <!-- Service Centers -->
+                            <li class="nav-item">
+
+                                <a class="nav-link @(isActive("ServiceCenter") ? "active" : "")"
+                                   asp-controller="ServiceCenter"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-building"></i>
+                                    Service Centers
+
+                                </a>
+
+                            </li>
+                            <!-- Service Categories -->
+                            <li class="nav-item">
+
+                                <a class="nav-link @(isActive("ServiceCategory") ? "active" : "")"
+                                   asp-controller="ServiceCategory"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-tags-fill"></i>
+                                    Service Categories
+
+                                </a>
+
+                            </li>
+
+                            <!-- Service Records -->
+                            <li class="nav-item">
+
+                                <a class="nav-link @(isActive("ServiceRecord") ? "active" : "")"
+                                   asp-controller="ServiceRecord"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-wrench-adjustable"></i>
+                                    Service Records
+
+                                </a>
+
+                            </li>
+
+                        </ul>
+
+
+                        <!-- Administration -->
+
+                        <div class="sidebar-section-label">
+                            Administration
+                        </div>
+
+                        <ul class="nav flex-column">
+
+                            <li class="nav-item">
+
+                                <a class="nav-link @(isActive("Admin") ? "active" : "")"
+                                   asp-controller="Admin"
+                                   asp-action="Users">
+
+                                    <i class="bi bi-people-fill"></i>
+                                    Manage Users
+
+                                </a>
+
+                            </li>
+                            <li class="nav-item">
+
+                                <a class="nav-link @(isActive("AuditLog") ? "active" : "")"
+                                   asp-controller="AuditLog"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-shield-check"></i>
+                                    Audit Logs
+
+                                </a>
+
+                            </li>
+
+                        </ul>
+
+                    }
+
+
+                    <!-- ========================= -->
+                    <!-- FLEET MANAGER -->
+                    <!-- ========================= -->
+                    @if (User.IsInRole("FleetManager"))
+                    {
+                        <div class="sidebar-section-label">
+                            Fleet Management
+                        </div>
+
+                        <ul class="nav flex-column">
+
+                            <!-- Dashboard -->
+                            <li class="nav-item">
+
+                                <a class="nav-link @(isActive("Dashboard") ? "active" : "")"
+                                   asp-controller="Dashboard"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-grid-1x2-fill"></i>
+                                    Dashboard
+
+                                </a>
+
+                            </li>
+
+
+                            <!-- Vehicles -->
+                            <li class="nav-item">
+
+                                <a class="nav-link @(isActive("Vehicle") ? "active" : "")"
+                                   asp-controller="Vehicle"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-car-front-fill"></i>
+                                    Vehicles
+
+                                </a>
+
+                            </li>
+
+
+                            <!-- Service Centers -->
+                            <li class="nav-item">
+
+                                <a class="nav-link @(isActive("ServiceCenter") ? "active" : "")"
+                                   asp-controller="ServiceCenter"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-building"></i>
+                                    Service Centers
+
+                                </a>
+
+                            </li>
+
+                            <!-- Service Categories -->
+                            <li class="nav-item">
+
+                                <a class="nav-link @(isActive("ServiceCategory") ? "active" : "")"
+                                   asp-controller="ServiceCategory"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-tags-fill"></i>
+                                    Service Categories
+
+                                </a>
+
+                            </li>
+
+                            <!-- Service Records -->
+                            <li class="nav-item">
+
+                                <a class="nav-link @(isActive("ServiceRecord") ? "active" : "")"
+                                   asp-controller="ServiceRecord"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-wrench-adjustable"></i>
+                                    Service Records
+
+                                </a>
+
+                            </li>
+
+                        </ul>
+                    }
+
+
+                    <!-- ========================= -->
+                    <!-- DRIVER -->
+                    <!-- ========================= -->
+                    @if (User.IsInRole("Driver"))
+                    {
+                        <div class="sidebar-section-label">
+                            My Fleet
+                        </div>
+
+                        <ul class="nav flex-column">
+
+                            <!-- Dashboard -->
+                            <li class="nav-item">
+
+                                <a class="nav-link @(isActive("Dashboard") ? "active" : "")"
+                                   asp-controller="Dashboard"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-grid-1x2-fill"></i>
+                                    Dashboard
+
+                                </a>
+
+                            </li>
+
+
+                            <!-- My Vehicles -->
+                            <li class="nav-item">
+
+                                <a class="nav-link @(isActive("Vehicle") ? "active" : "")"
+                                   asp-controller="Vehicle"
+                                   asp-action="Index">
+
+                                    <i class="bi bi-car-front-fill"></i>
+                                    My Vehicles
+
+                                </a>
+
+                            </li>
+
+                        </ul>
+                    }
+
+            </nav>
+
+
+            <!-- Sidebar Footer -->
+
+            <div class="sidebar-footer">
+
+                <form asp-controller="Account"
+                      asp-action="Logout"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <button type="submit"
+                            class="btn btn-link nav-link text-danger">
+
+                        <i class="bi bi-box-arrow-right"></i>
+                        Logout
+
+                    </button>
+
+                </form>
+
+                <div class="mt-2">
+                    &copy; 2026 FleetCare Pro
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- Mobile Backdrop -->
+
+        <div class="sidebar-backdrop"
+             id="sidebarBackdrop">
+        </div>
+
+
+        <!-- ========================= -->
+        <!-- Main -->
+        <!-- ========================= -->
+
+        <div class="app-main">
+
+
+            <!-- ========================= -->
+            <!-- Header -->
+            <!-- ========================= -->
+
+            <header class="app-topbar">
+
+                <div class="d-flex align-items-center gap-2">
+
+                    <button class="sidebar-toggle"
+                            id="sidebarToggle"
+                            type="button"
+                            aria-label="Toggle sidebar">
+
+                        <i class="bi bi-list"></i>
+
+                    </button>
+
+
+                    <h1 class="page-title">
+                        @ViewData["Title"]
+                    </h1>
+
+                </div>
+
+
+                <!-- User -->
+
+                <div class="dropdown">
+
+                    <button class="btn user-chip border-0 bg-transparent dropdown-toggle"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+
+                        <span class="user-avatar">
+
+                            @(User.Identity?.Name != null &&
+                                                        User.Identity.Name.Length > 0
+                                                        ? User.Identity.Name.Substring(0, 1).ToUpper()
+                                                        : "U")
+
+                        </span>
+
+                            <span class="text-dark fw-semibold d-none d-sm-inline">
+
+                                @User.Identity?.Name
+
+                            </span>
+
+                        </button>
+
+
+                        <ul class="dropdown-menu dropdown-menu-end">
+
+                            <li>
+
+                                <form asp-controller="Account"
+                                      asp-action="Logout"
+                                      method="post"
+                                      class="px-2 py-1">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <button type="submit"
+                                            class="btn btn-sm btn-outline-danger w-100">
+
+                                        <i class="bi bi-box-arrow-right me-1"></i>
+                                        Logout
+
+                                    </button>
+
+                                </form>
+
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </header>
+
+
+                <!-- ========================= -->
+                <!-- Page Content -->
+                <!-- ========================= -->
+
+                <main role="main"
+                      class="app-content">
+
+                    @RenderBody()
+
+                </main>
+
+
+                <!-- ========================= -->
+                <!-- Footer -->
+                <!-- ========================= -->
+
+                <footer class="app-footer d-flex justify-content-between flex-wrap gap-2">
+
+                    <span>
+                        &copy; 2026 - FleetCare Pro
+                    </span>
+
+                    <a asp-controller="Home"
+                       asp-action="Privacy"
+                       class="text-decoration-none text-muted">
+
+                        Privacy
+
+                    </a>
+
+                </footer>
+
+            </div>
+
+        </div>
+        }
+    else
+    {
+        <!-- ========================= -->
+        <!-- Unauthenticated Pages -->
+        <!-- ========================= -->
+        @RenderBody()
+    }
+
+
+    <!-- ========================= -->
+    <!-- Scripts -->
+    <!-- ========================= -->
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/site.js"
+            asp-append-version="true">
+    </script>
+
+
+    <script>
+
+        (function () {
+
+            var sidebar =
+                document.getElementById('appSidebar');
+
+            var toggle =
+                document.getElementById('sidebarToggle');
+
+            var backdrop =
+                document.getElementById('sidebarBackdrop');
+
+
+            function closeSidebar() {
+
+                if (sidebar) {
+                    sidebar.classList.remove('show');
+                }
+
+                document.body.classList.remove('sidebar-open');
+
+            }
+
+
+            if (toggle) {
+
+                toggle.addEventListener('click', function () {
+
+                    if (sidebar) {
+
+                        sidebar.classList.toggle('show');
+
+                        document.body.classList.toggle(
+                            'sidebar-open'
+                        );
+
+                    }
+
+                });
+
+            }
+
+
+            if (backdrop) {
+
+                backdrop.addEventListener(
+                    'click',
+                    closeSidebar
+                );
+
+            }
+
+        })();
+
+    </script>
+
+
+    @await RenderSectionAsync(
+    "Scripts",
+        required: false
+        )
+    @RenderSection("Styles", required: false)
+</body>
+</html>
