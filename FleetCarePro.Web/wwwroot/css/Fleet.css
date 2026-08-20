@@ -1,0 +1,360 @@
+﻿/* =========================================
+   FleetCarePro - Global Index Pages
+   Bootstrap Override
+========================================= */
+
+/* Page background */
+body {
+    background: #f7f9fa;
+}
+
+
+/* =========================================
+   Main Container
+========================================= */
+
+.container {
+    max-width: 1400px;
+}
+
+
+    /* =========================================
+   Page Headers
+========================================= */
+
+    .container > .d-flex {
+        padding: 5px 5px 18px;
+    }
+
+        .container > .d-flex h2 {
+            color: #263238;
+            font-size: 25px;
+            font-weight: 750;
+            margin-bottom: 5px;
+        }
+
+            .container > .d-flex h2 i {
+                color: #198754;
+            }
+
+        .container > .d-flex p {
+            color: #929ba3 !important;
+            font-size: 12px;
+            margin-bottom: 0;
+        }
+
+
+/* =========================================
+   Cards
+========================================= */
+
+.card {
+    border: 1px solid #edf0f2 !important;
+    border-radius: 16px !important;
+    box-shadow: 0 7px 25px rgba(35, 45, 55, .04) !important;
+    overflow: hidden;
+    background: #fff;
+}
+
+.card-body {
+    padding: 0 !important;
+}
+
+
+/* =========================================
+   Tables
+========================================= */
+
+.table {
+    margin-bottom: 0;
+    color: #45515a;
+    font-size: 12px;
+}
+
+    .table thead {
+        border-bottom: 1px solid #e6eaed;
+    }
+
+        .table thead th {
+            background: #f8fafb !important;
+            color: #7b858d !important;
+            border: none !important;
+            border-bottom: 1px solid #e8ecef !important;
+            padding: 14px 16px;
+            font-size: 10px;
+            font-weight: 750;
+            text-transform: uppercase;
+            letter-spacing: .35px;
+            white-space: nowrap;
+        }
+
+            .table thead th:first-child {
+                padding-left: 20px;
+            }
+
+    .table tbody td {
+        padding: 15px 16px;
+        border-color: #f0f2f3;
+        vertical-align: middle;
+    }
+
+    .table tbody tr {
+        transition: .15s ease;
+    }
+
+.table-hover tbody tr:hover {
+    background: transparent;
+}
+
+    .table-hover tbody tr:hover td {
+        background: #fafcfc;
+    }
+
+
+/* =========================================
+   Table Text
+========================================= */
+
+.table tbody td strong {
+    color: #303940;
+    font-weight: 700;
+}
+
+.table tbody td .text-muted {
+    color: #9aa3aa !important;
+    font-size: 11px;
+}
+
+
+/* =========================================
+   Badges
+========================================= */
+
+.table .badge {
+    border-radius: 7px;
+    padding: 6px 9px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.table .bg-info {
+    background: #fff4cf !important;
+    color: #b27d00 !important;
+}
+
+.table .bg-primary {
+    background: #eaf8f0 !important;
+    color: #198754 !important;
+}
+
+.table .bg-success {
+    background: #eaf8f0 !important;
+    color: #198754 !important;
+}
+
+.table .bg-danger {
+    background: #fff0f0 !important;
+    color: #dc3545 !important;
+}
+
+.table .bg-warning {
+    background: #fff4cf !important;
+    color: #b27d00 !important;
+}
+
+
+/* =========================================
+   Buttons
+========================================= */
+
+.btn {
+    border-radius: 8px !important;
+    font-size: 10px !important;
+    font-weight: 650 !important;
+    transition: all .18s ease;
+}
+
+
+/* Primary */
+
+.btn-primary {
+    background: #198754 !important;
+    border-color: #198754 !important;
+}
+
+    .btn-primary:hover {
+        background: #157347 !important;
+        border-color: #157347 !important;
+        transform: translateY(-1px);
+    }
+
+
+/* Warning */
+
+.btn-warning {
+    background: #fff4cf !important;
+    border-color: #f2df9d !important;
+    color: #b27d00 !important;
+}
+
+    .btn-warning:hover {
+        background: #ffeeb5 !important;
+        border-color: #efd88e !important;
+        color: #946800 !important;
+    }
+
+
+/* Danger */
+
+.btn-danger {
+    background: #fff0f0 !important;
+    border-color: #f3cccc !important;
+    color: #dc3545 !important;
+}
+
+    .btn-danger:hover {
+        background: #ffe0e0 !important;
+        border-color: #efb8b8 !important;
+        color: #bb2d3b !important;
+    }
+
+
+/* Secondary */
+
+.btn-secondary {
+    background: #f1f3f4 !important;
+    border-color: #e1e5e8 !important;
+    color: #68747d !important;
+}
+
+    .btn-secondary:hover {
+        background: #e5e8ea !important;
+        color: #4f5a62 !important;
+    }
+
+
+/* Outline buttons */
+
+.btn-outline-info {
+    border-color: #d7e8f7 !important;
+    color: #0d6efd !important;
+    background: #edf6ff !important;
+}
+
+    .btn-outline-info:hover {
+        background: #dceeff !important;
+        color: #0b5ed7 !important;
+    }
+
+.btn-outline-warning {
+    border-color: #f2df9d !important;
+    color: #b27d00 !important;
+    background: #fff8df !important;
+}
+
+    .btn-outline-warning:hover {
+        background: #fff0bd !important;
+        color: #946800 !important;
+    }
+
+.btn-outline-danger {
+    border-color: #f3cccc !important;
+    color: #dc3545 !important;
+    background: #fff0f0 !important;
+}
+
+    .btn-outline-danger:hover {
+        background: #ffe0e0 !important;
+        color: #bb2d3b !important;
+    }
+
+.btn-outline-secondary {
+    border-color: #dfe4e7 !important;
+    color: #68747d !important;
+    background: #fff !important;
+}
+
+
+/* =========================================
+   Alerts
+========================================= */
+
+.alert {
+    border: none;
+    border-radius: 10px;
+    font-size: 11px;
+    padding: 11px 14px;
+    box-shadow: none;
+}
+
+.alert-success {
+    background: #eaf8f0;
+    color: #198754;
+}
+
+.alert-info {
+    background: #edf6ff;
+    color: #0d6efd;
+}
+
+.alert-danger {
+    background: #fff0f0;
+    color: #dc3545;
+}
+
+
+/* =========================================
+   Action Area
+========================================= */
+
+.table td.text-center {
+    white-space: nowrap;
+}
+
+.table td .btn {
+    margin: 2px;
+}
+
+
+/* =========================================
+   Empty State
+========================================= */
+
+.container > .alert-info {
+    padding: 30px;
+    text-align: center;
+    border-radius: 14px;
+}
+
+
+/* =========================================
+   Responsive
+========================================= */
+
+@media (max-width: 768px) {
+
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+        .container > .d-flex {
+            align-items: flex-start !important;
+        }
+
+            .container > .d-flex h2 {
+                font-size: 21px;
+            }
+
+            .container > .d-flex p {
+                display: none;
+            }
+
+    .table {
+        min-width: 800px;
+    }
+
+    .table-responsive {
+        border-radius: 16px;
+    }
+}

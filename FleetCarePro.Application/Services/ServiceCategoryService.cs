@@ -11,7 +11,7 @@ public class ServiceCategoryService : IServiceCategoryService
     private readonly IServiceCategoryRepository _repository;
     private readonly IMapper _mapper;
 
-    public ServiceCategoryService( IServiceCategoryRepository repository, IMapper mapper)
+    public ServiceCategoryService(IServiceCategoryRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
@@ -39,7 +39,7 @@ public class ServiceCategoryService : IServiceCategoryService
         return _mapper.Map<ServiceCategoryDto>(category);
     }
 
-    public async Task<bool> UpdateAsync(int id,UpdateServiceCategoryDto dto)
+    public async Task<bool> UpdateAsync(int id, UpdateServiceCategoryDto dto)
     {
         var category = await _repository.GetByIdAsync(id);
         if (category == null)
@@ -49,11 +49,14 @@ public class ServiceCategoryService : IServiceCategoryService
         await _repository.SaveChangesAsync();
         return true;
     }
-
     public async Task<bool> DeleteAsync(int id)
     {
         var category = await _repository.GetByIdAsync(id);
-        if (category == null)return false;
+        if (category == null)
+            return false;
+        var hasItems =await _repository.HasServiceLineItemsAsync(id);
+        if (hasItems)
+            return false;
         _repository.Delete(category);
         await _repository.SaveChangesAsync();
         return true;

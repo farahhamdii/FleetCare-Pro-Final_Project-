@@ -1,129 +1,538 @@
-﻿```cshtml
-@model FleetCarePro.Web.ViewModels.Vehicle.VehicleDetailsViewModel
+﻿@model FleetCarePro.Web.ViewModels.Vehicle.VehicleDetailsViewModel
 @using FleetCarePro.Domain.Enums
 
 @{
     ViewData["Title"] = $"{Model.Make} {Model.Model} Details";
 }
 
-<div class="container mt-4">
-    <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
-        <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
-            <h4 class="mb-0"><i class="bi bi-info-circle me-2"></i>Vehicle Details</h4>
+<style>
+    .vehicle-details-page {
+        padding: 28px 35px 45px;
+    }
 
-            <div>
-                @if (User.IsInRole("Admin") || User.IsInRole("FleetManager"))
-                {
-                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-sm">
-                        <i class="bi bi-pencil"></i> Edit
-                    </a>
-                }
+    .vehicle-details-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
 
-                <a asp-action="Index" class="btn btn-outline-light btn-sm">
-                    <i class="bi bi-arrow-left"></i> Back to List
+    .vehicle-breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: #9aa3ab;
+        margin-bottom: 8px;
+    }
+
+        .vehicle-breadcrumb a {
+            color: #198754;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+    .vehicle-details-header h2 {
+        margin: 0;
+        color: #263238;
+        font-size: 27px;
+        font-weight: 750;
+    }
+
+    .vehicle-details-header p {
+        margin: 5px 0 0;
+        color: #8a949d;
+        font-size: 12px;
+    }
+
+    .vehicle-header-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .vehicle-edit-btn {
+        background: #fff4cf;
+        color: #b27d00;
+        border: 1px solid #f2df9d;
+    }
+
+        .vehicle-edit-btn:hover {
+            background: #ffeeb5;
+            color: #946800;
+        }
+
+    .vehicle-back-btn {
+        color: #68747d;
+        border-color: #dfe4e7;
+        background: #fff;
+    }
+
+    .vehicle-details-card {
+        background: #fff;
+        border: 1px solid #edf0f2;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 8px 30px rgba(35,45,55,.04);
+    }
+
+    .vehicle-details-content {
+        display: grid;
+        grid-template-columns: 42% 58%;
+        min-height: 430px;
+    }
+
+    .vehicle-image-side {
+        padding: 25px;
+        background: linear-gradient(145deg, #fffdf5, #fafbfc);
+        border-right: 1px solid #edf0f2;
+    }
+
+    .vehicle-image-wrapper {
+        position: relative;
+        height: 100%;
+        min-height: 380px;
+        border-radius: 15px;
+        overflow: hidden;
+        background: #f4f5f6;
+    }
+
+        .vehicle-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            min-height: 380px;
+            object-fit: cover;
+            display: block;
+        }
+
+    .vehicle-image-placeholder {
+        height: 100%;
+        min-height: 380px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #c2c8cc;
+        background: #f5f6f7;
+    }
+
+        .vehicle-image-placeholder i {
+            font-size: 90px;
+        }
+
+    .vehicle-image-badge {
+        position: absolute;
+        left: 15px;
+        top: 15px;
+        padding: 7px 11px;
+        border-radius: 20px;
+        background: rgba(255,255,255,.92);
+        color: #b27d00;
+        font-size: 10px;
+        font-weight: 700;
+        box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    }
+
+    .vehicle-info-side {
+        padding: 30px 35px;
+    }
+
+    .vehicle-title-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .vehicle-title h3 {
+        margin: 0;
+        color: #263238;
+        font-size: 25px;
+        font-weight: 750;
+    }
+
+        .vehicle-title h3 span {
+            color: #9aa3ab;
+            font-weight: 500;
+            font-size: 18px;
+        }
+
+    .vehicle-title small {
+        display: block;
+        margin-top: 5px;
+        color: #929ba3;
+        font-size: 11px;
+    }
+
+    .vehicle-status {
+        padding: 7px 12px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .status-active {
+        background: #eaf8f0;
+        color: #198754;
+    }
+
+    .status-service {
+        background: #fff4cf;
+        color: #b27d00;
+    }
+
+    .status-decommissioned {
+        background: #fff0f0;
+        color: #dc3545;
+    }
+
+    .vehicle-info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 13px;
+    }
+
+    .vehicle-info-item {
+        padding: 14px;
+        border: 1px solid #edf0f2;
+        border-radius: 12px;
+        background: #fafbfc;
+    }
+
+        .vehicle-info-item.full {
+            grid-column: 1 / -1;
+        }
+
+        .vehicle-info-item small {
+            display: block;
+            color: #9aa3ab;
+            font-size: 10px;
+            margin-bottom: 5px;
+        }
+
+        .vehicle-info-item strong {
+            color: #3d474f;
+            font-size: 13px;
+        }
+
+    .license-value {
+        display: inline-block;
+        padding: 4px 9px;
+        border-radius: 6px;
+        background: #fff8df;
+        color: #a97400;
+        font-weight: 700;
+        letter-spacing: .4px;
+    }
+
+    .driver-value {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .driver-icon {
+        width: 29px;
+        height: 29px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eaf8f0;
+        color: #198754;
+        font-size: 12px;
+    }
+
+    .unassigned {
+        color: #a0a8ae !important;
+        font-weight: 500 !important;
+    }
+
+    @@media (max-width: 900px) {
+        .vehicle-details-content {
+            grid-template-columns: 1fr;
+        }
+
+        .vehicle-image-side {
+            border-right: none;
+            border-bottom: 1px solid #edf0f2;
+        }
+
+        .vehicle-image-wrapper,
+        .vehicle-image-wrapper img,
+        .vehicle-image-placeholder {
+            min-height: 300px;
+        }
+    }
+
+    @@media (max-width: 600px) {
+        .vehicle-details-page {
+            padding: 20px 15px 35px;
+        }
+
+        .vehicle-details-header {
+            align-items: flex-start;
+        }
+
+            .vehicle-details-header h2 {
+                font-size: 22px;
+            }
+
+        .vehicle-header-actions {
+            flex-direction: column;
+        }
+
+        .vehicle-info-side {
+            padding: 22px 18px;
+        }
+
+        .vehicle-info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .vehicle-info-item.full {
+            grid-column: auto;
+        }
+    }
+</style>
+
+
+<div class="vehicle-details-page">
+
+    <!-- Header -->
+
+    <div class="vehicle-details-header">
+
+        <div>
+
+            <div class="vehicle-breadcrumb">
+
+                <a asp-action="Index">
+                    <i class="bi bi-car-front-fill"></i>
+                    Vehicles
                 </a>
+
+                <i class="bi bi-chevron-right"></i>
+
+                <span>Details</span>
+
             </div>
+
+            <h2>Vehicle Details</h2>
+
+            <p>
+                View vehicle information and current fleet assignment.
+            </p>
+
         </div>
 
-        <div class="card-body p-4">
-            <div class="row g-4">
 
-                <!-- Vehicle Image -->
-                <div class="col-md-5 text-center">
+        <div class="vehicle-header-actions">
+
+            @if (User.IsInRole("Admin") || User.IsInRole("FleetManager"))
+            {
+                <a asp-action="Edit"
+                   asp-route-id="@Model.Id"
+                   class="btn btn-sm vehicle-edit-btn">
+
+                    <i class="bi bi-pencil me-1"></i>
+                    Edit
+
+                </a>
+            }
+
+            <a asp-action="Index"
+               class="btn btn-sm vehicle-back-btn">
+
+                <i class="bi bi-arrow-left me-1"></i>
+                Back
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Details -->
+
+    <div class="vehicle-details-card">
+
+        <div class="vehicle-details-content">
+
+            <!-- Image -->
+
+            <div class="vehicle-image-side">
+
+                <div class="vehicle-image-wrapper">
+
                     @if (!string.IsNullOrEmpty(Model.VehicleImageURL))
                     {
                         <img src="@Model.VehicleImageURL"
-                             alt="@Model.Make @Model.Model"
-                             class="img-fluid rounded shadow-sm w-100 object-fit-cover"
-                             style="max-height: 320px;" />
+                             alt="@Model.Make @Model.Model" />
                     }
                     else
                     {
-                        <div class="bg-light rounded d-flex align-items-center justify-content-center text-muted"
-                             style="height: 280px;">
-                            <i class="bi bi-car-front display-1"></i>
+                        <div class="vehicle-image-placeholder">
+
+                            <i class="bi bi-car-front"></i>
+
                         </div>
                     }
-                </div>
 
-                <!-- Info Table -->
-                <div class="col-md-7">
-                    <h3 class="fw-bold text-primary mb-3">
-                        @Model.Make @Model.Model
-                        <span class="text-muted">(@Model.Year)</span>
-                    </h3>
+                    <span class="vehicle-image-badge">
+                        <i class="bi bi-car-front-fill me-1"></i>
+                        Fleet Vehicle
+                    </span>
 
-                    <table class="table table-borderless">
-                        <tbody>
-
-                            <tr>
-                                <th class="ps-0 text-muted" style="width: 35%;">VIN:</th>
-                                <td class="fw-bold">@Model.VIN</td>
-                            </tr>
-
-                            <tr>
-                                <th class="ps-0 text-muted">License Plate:</th>
-                                <td>
-                                    <span class="badge bg-light text-dark border fs-6">
-                                        @Model.LicensePlate
-                                    </span>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <th class="ps-0 text-muted">Status:</th>
-                                <td>
-                                    @switch (Model.Status)
-                                    {
-                                        case VehicleStatus.Active:
-                                            <span class="badge bg-success">Active</span>
-                                            break;
-
-                                        case VehicleStatus.InService:
-                                            <span class="badge bg-warning text-dark">In Service</span>
-                                            break;
-
-                                        case VehicleStatus.Decommissioned:
-                                            <span class="badge bg-danger">Decommissioned</span>
-                                            break;
-                                    }
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <th class="ps-0 text-muted">Current Mileage:</th>
-                                <td class="fw-semibold">
-                                    @Model.Mileage.ToString("N0") km
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <th class="ps-0 text-muted">Purchase Price:</th>
-                                <td class="fw-semibold">
-                                    $@Model.PurchasePrice.ToString("N2")
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <th class="ps-0 text-muted">Assigned Driver:</th>
-                                <td class="fw-semibold">
-                                    @if (!string.IsNullOrEmpty(Model.DriverName))
-                                    {
-                                        <span>@Model.DriverName</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">Unassigned</span>
-                                    }
-                                </td>
-                            </tr>
-
-                        </tbody>
-                    </table>
                 </div>
 
             </div>
+
+
+            <!-- Information -->
+
+            <div class="vehicle-info-side">
+
+                <div class="vehicle-title-row">
+
+                    <div class="vehicle-title">
+
+                        <h3>
+                            @Model.Make @Model.Model
+                            <span>@Model.Year</span>
+                        </h3>
+
+                        <small>
+                            Vehicle Identification & Operational Details
+                        </small>
+
+                    </div>
+
+
+                    @switch (Model.Status)
+                    {
+                        case VehicleStatus.Active:
+
+                            <span class="vehicle-status status-active">
+                                <i class="bi bi-check-circle me-1"></i>
+                                Active
+                            </span>
+
+                            break;
+
+                        case VehicleStatus.InService:
+
+                            <span class="vehicle-status status-service">
+                                <i class="bi bi-tools me-1"></i>
+                                In Service
+                            </span>
+
+                            break;
+
+                        case VehicleStatus.Decommissioned:
+
+                            <span class="vehicle-status status-decommissioned">
+                                <i class="bi bi-x-circle me-1"></i>
+                                Decommissioned
+                            </span>
+
+                            break;
+                    }
+
+                </div>
+
+
+                <div class="vehicle-info-grid">
+
+                    <div class="vehicle-info-item full">
+
+                        <small>
+                            VIN
+                        </small>
+
+                        <strong>
+                            @Model.VIN
+                        </strong>
+
+                    </div>
+
+
+                    <div class="vehicle-info-item">
+
+                        <small>
+                            License Plate
+                        </small>
+
+                        <span class="license-value">
+                            @Model.LicensePlate
+                        </span>
+
+                    </div>
+
+
+                    <div class="vehicle-info-item">
+
+                        <small>
+                            Current Mileage
+                        </small>
+
+                        <strong>
+                            @Model.Mileage.ToString("N0") km
+                        </strong>
+
+                    </div>
+
+
+                    <div class="vehicle-info-item">
+
+                        <small>
+                            Purchase Price
+                        </small>
+
+                        <strong>
+                            EGP @Model.PurchasePrice.ToString("N2")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="vehicle-info-item">
+
+                        <small>
+                            Assigned Driver
+                        </small>
+
+                        @if (!string.IsNullOrEmpty(Model.DriverName))
+                        {
+                            <div class="driver-value">
+
+                                <span class="driver-icon">
+                                    <i class="bi bi-person-fill"></i>
+                                </span>
+
+                                <strong>
+                                    @Model.DriverName
+                                </strong>
+
+                            </div>
+                        }
+                        else
+                        {
+                            <strong class="unassigned">
+                                <i class="bi bi-person-x me-1"></i>
+                                Unassigned
+                            </strong>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
+
     </div>
+
 </div>
-```

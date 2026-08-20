@@ -4,84 +4,429 @@
     ViewData["Title"] = "Service Category Details";
 }
 
-<div class="container mt-4">
+<style>
+    .category-details-page {
+        padding: 28px 35px 45px;
+    }
 
-    <div class="row justify-content-center">
+    .category-details-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
 
-        <div class="col-md-8">
+    .category-breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        color: #9aa3ab;
+        font-size: 12px;
+    }
 
-            <div class="card shadow-sm border-0">
+        .category-breadcrumb a {
+            color: #198754;
+            text-decoration: none;
+            font-weight: 600;
+        }
 
-                <div class="card-header bg-dark text-white">
-                    <h4 class="mb-0">
-                        <i class="bi bi-tags me-2"></i>
-                        Service Category Details
-                    </h4>
+    .category-details-header h2 {
+        margin: 0;
+        color: #263238;
+        font-size: 27px;
+        font-weight: 750;
+    }
+
+    .category-details-header p {
+        margin: 5px 0 0;
+        color: #8a949d;
+        font-size: 12px;
+    }
+
+    .category-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .category-edit-btn {
+        background: #fff4cf;
+        color: #b27d00;
+        border: 1px solid #f2df9d;
+    }
+
+        .category-edit-btn:hover {
+            background: #ffeeb5;
+            color: #946800;
+        }
+
+    .category-back-btn {
+        background: #fff;
+        color: #68747d;
+        border-color: #dfe4e7;
+    }
+
+    .category-details-card {
+        background: #fff;
+        border: 1px solid #edf0f2;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 8px 30px rgba(35,45,55,.04);
+    }
+
+    .category-details-content {
+        display: grid;
+        grid-template-columns: 34% 66%;
+        min-height: 390px;
+    }
+
+    /* Overview */
+
+    .category-overview {
+        padding: 30px;
+        background: linear-gradient(145deg, #fffdf5, #fafbfc);
+        border-right: 1px solid #edf0f2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .category-icon {
+        width: 100px;
+        height: 100px;
+        border-radius: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff4cf;
+        color: #d99a00;
+        font-size: 42px;
+        margin-bottom: 20px;
+    }
+
+    .category-overview h3 {
+        margin: 0;
+        color: #303940;
+        font-size: 21px;
+        font-weight: 750;
+    }
+
+    .category-overview p {
+        margin: 7px 0 0;
+        color: #929ba3;
+        font-size: 11px;
+    }
+
+    .category-tag {
+        margin-top: 17px;
+        padding: 7px 12px;
+        border-radius: 20px;
+        background: #fff8df;
+        color: #b27d00;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+    /* Information */
+
+    .category-info {
+        padding: 30px 35px;
+    }
+
+    .info-heading {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        margin-bottom: 22px;
+    }
+
+    .info-heading-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff4cf;
+        color: #d99a00;
+        font-size: 17px;
+    }
+
+    .info-heading h5 {
+        margin: 0 0 3px;
+        color: #303940;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .info-heading span {
+        color: #929ba3;
+        font-size: 10px;
+    }
+
+    .category-info-box {
+        padding: 17px;
+        margin-bottom: 14px;
+        border: 1px solid #edf0f2;
+        border-radius: 12px;
+        background: #fafbfc;
+    }
+
+        .category-info-box small {
+            display: block;
+            margin-bottom: 7px;
+            color: #9aa3ab;
+            font-size: 10px;
+        }
+
+        .category-info-box strong {
+            color: #3d474f;
+            font-size: 14px;
+        }
+
+    .description-text {
+        color: #5f6971;
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    .interval-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+    }
+
+    .interval-value {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 8px 12px;
+        border-radius: 9px;
+        background: #fff4cf;
+        color: #b27d00;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+        .interval-value i {
+            font-size: 13px;
+        }
+
+    @@media (max-width: 850px) {
+
+        .category-details-content {
+            grid-template-columns: 1fr;
+        }
+
+        .category-overview {
+            border-right: none;
+            border-bottom: 1px solid #edf0f2;
+            padding: 25px;
+        }
+    }
+
+    @@media (max-width: 600px) {
+
+        .category-details-page {
+            padding: 20px 15px 35px;
+        }
+
+        .category-details-header {
+            align-items: flex-start;
+        }
+
+            .category-details-header h2 {
+                font-size: 22px;
+            }
+
+        .category-actions {
+            flex-direction: column;
+        }
+
+        .category-info {
+            padding: 22px 18px;
+        }
+    }
+</style>
+
+
+<div class="category-details-page">
+
+    <!-- Header -->
+
+    <div class="category-details-header">
+
+        <div>
+
+            <div class="category-breadcrumb">
+
+                <a asp-action="Index">
+
+                    <i class="bi bi-tags me-1"></i>
+
+                    Service Categories
+
+                </a>
+
+                <i class="bi bi-chevron-right"></i>
+
+                <span>Details</span>
+
+            </div>
+
+            <h2>Service Category Details</h2>
+
+            <p>
+                View maintenance category information and recommended service interval.
+            </p>
+
+        </div>
+
+
+        <div class="category-actions">
+
+            <a asp-action="Edit"
+               asp-route-id="@Model.Id"
+               class="btn btn-sm category-edit-btn">
+
+                <i class="bi bi-pencil me-1"></i>
+
+                Edit
+
+            </a>
+
+            <a asp-action="Index"
+               class="btn btn-sm category-back-btn">
+
+                <i class="bi bi-arrow-left me-1"></i>
+
+                Back
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Details Card -->
+
+    <div class="category-details-card">
+
+        <div class="category-details-content">
+
+            <!-- Overview -->
+
+            <div class="category-overview">
+
+                <div class="category-icon">
+
+                    <i class="bi bi-tags-fill"></i>
+
                 </div>
 
-                <div class="card-body">
+                <h3>
+                    @Model.CategoryName
+                </h3>
 
-                    <div class="mb-4">
-                        <label class="text-muted">
-                            Category Name
-                        </label>
+                <p>
+                    Fleet Maintenance Category
+                </p>
 
-                        <h4 class="fw-bold">
-                            @Model.CategoryName
-                        </h4>
+                <span class="category-tag">
+
+                    <i class="bi bi-check-circle me-1"></i>
+
+                    Active Category
+
+                </span>
+
+            </div>
+
+
+            <!-- Information -->
+
+            <div class="category-info">
+
+                <div class="info-heading">
+
+                    <div class="info-heading-icon">
+
+                        <i class="bi bi-info-circle"></i>
+
                     </div>
 
-                    <div class="mb-4">
-                        <label class="text-muted">
-                            Description
-                        </label>
+                    <div>
 
-                        <p class="mb-0">
-                            @if (string.IsNullOrWhiteSpace(Model.Description))
-                            {
-                                <span class="text-muted">
-                                    No description available.
-                                </span>
-                            }
-                            else
-                            {
-                                @Model.Description
-                            }
-                        </p>
+                        <h5>Category Information</h5>
+
+                        <span>
+                            Maintenance details and recommended schedule
+                        </span>
+
                     </div>
 
-                    <div class="mb-4">
-                        <label class="text-muted">
-                            Recommended Interval
-                        </label>
+                </div>
 
-                        <div>
-                            <span class="badge bg-info text-dark fs-6">
-                                Every @Model.RecommendedIntervalMonths months
-                            </span>
+
+                <!-- Description -->
+
+                <div class="category-info-box">
+
+                    <small>
+                        Description
+                    </small>
+
+                    @if (string.IsNullOrWhiteSpace(Model.Description))
+                    {
+                        <div class="description-text">
+                            <i class="bi bi-dash-circle me-1"></i>
+                            No description available.
                         </div>
-                    </div>
-
-                    <div class="d-flex justify-content-between">
-
-                        <a asp-action="Index"
-                           class="btn btn-secondary">
-                            <i class="bi bi-arrow-left me-1"></i>
-                            Back
-                        </a>
-
-                        <a asp-action="Edit"
-                           asp-route-id="@Model.Id"
-                           class="btn btn-warning">
-                            <i class="bi bi-pencil me-1"></i>
-                            Edit
-                        </a>
-
-                    </div>
+                    }
+                    else
+                    {
+                        <div class="description-text">
+                            @Model.Description
+                        </div>
+                    }
 
                 </div>
+
+
+                <!-- Interval -->
+
+                <div class="category-info-box interval-box">
+
+                    <div>
+
+                        <small>
+                            Recommended Service Interval
+                        </small>
+
+                        <strong>
+                            Maintenance Schedule
+                        </strong>
+
+                    </div>
+
+                    <span class="interval-value">
+
+                        <i class="bi bi-calendar-check"></i>
+
+                        Every @Model.RecommendedIntervalMonths months
+
+                    </span>
+
+                </div>
+
             </div>
 
         </div>
+
     </div>
+
 </div>

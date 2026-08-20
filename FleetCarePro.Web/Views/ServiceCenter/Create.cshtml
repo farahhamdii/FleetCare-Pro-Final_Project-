@@ -4,194 +4,939 @@
     ViewData["Title"] = "Create Service Center";
 }
 
-<div class="container mt-4">
+<div class="create-center-page">
 
-    <div class="row justify-content-center">
+    <!-- Page Header -->
+    <div class="create-center-header">
 
-        <div class="col-md-8">
+        <div>
 
-            <div class="card shadow">
+            <div class="page-breadcrumb">
 
-                <div class="card-header">
-                    <h3 class="mb-0">
-                        Create Service Center
-                    </h3>
-                </div>
+                <a asp-action="Index">
+                    <i class="bi bi-buildings"></i>
+                    Service Centers
+                </a>
 
-                <div class="card-body">
+                <i class="bi bi-chevron-right"></i>
 
-                    <form asp-action="Create" method="post">
-
-                        @Html.AntiForgeryToken()
-
-                        <div asp-validation-summary="ModelOnly"
-                             class="text-danger mb-3">
-                        </div>
-
-                        <!-- Name -->
-
-                        <div class="mb-3">
-
-                            <label asp-for="Name"
-                                   class="form-label">
-                            </label>
-
-                            <input asp-for="Name"
-                                   class="form-control" />
-
-                            <span asp-validation-for="Name"
-                                  class="text-danger">
-                            </span>
-
-                        </div>
-
-
-                        <!-- Phone -->
-
-                        <div class="mb-3">
-
-                            <label asp-for="PhoneNumber"
-                                   class="form-label">
-                            </label>
-
-                            <input asp-for="PhoneNumber"
-                                   class="form-control" />
-
-                            <span asp-validation-for="PhoneNumber"
-                                  class="text-danger">
-                            </span>
-
-                        </div>
-
-
-                        <!-- Email -->
-
-                        <div class="mb-3">
-
-                            <label asp-for="Email"
-                                   class="form-label">
-                            </label>
-
-                            <input asp-for="Email"
-                                   class="form-control" />
-
-                            <span asp-validation-for="Email"
-                                  class="text-danger">
-                            </span>
-
-                        </div>
-
-
-                        <!-- Address -->
-
-                        <div class="mb-3">
-
-                            <label asp-for="Address"
-                                   class="form-label">
-                            </label>
-
-                            <textarea asp-for="Address"
-                                      class="form-control"
-                                      rows="3">
-                            </textarea>
-
-                            <span asp-validation-for="Address"
-                                  class="text-danger">
-                            </span>
-
-                        </div>
-
-
-                        <!-- Services -->
-
-                        <div class="mb-4">
-
-                            <label class="form-label fw-bold">
-                                Available Services
-                            </label>
-
-                            <div class="border rounded p-3">
-
-                                @foreach (var category in
-                                                                (IEnumerable<SelectListItem>)ViewBag.ServiceCategories)
-                                {
-                                    <div class="form-check mb-2">
-
-                                        <input class="form-check-input"
-                                               type="checkbox"
-                                               name="SelectedServiceCategoryIds"
-                                               value="@category.Value"
-                                               id="category_@category.Value"
-                                               @(category.Selected ? "checked" : "") />
-
-                                        <label class="form-check-label"
-                                               for="category_@category.Value">
-
-                                            @category.Text
-
-                                        </label>
-
-                                    </div>
-                                }
-
-                            </div>
-
-                            <small class="text-muted">
-                                Select the services provided by this service center.
-                            </small>
-
-                        </div>
-
-
-                        <!-- Active -->
-
-                        <div class="form-check mb-4">
-
-                            <input asp-for="IsActive"
-                                   class="form-check-input" />
-
-                            <label asp-for="IsActive"
-                                   class="form-check-label">
-                            </label>
-
-                        </div>
-
-
-                        <!-- Buttons -->
-
-                        <div class="d-flex gap-2">
-
-                            <button type="submit"
-                                    class="btn btn-primary">
-
-                                <i class="bi bi-check-lg me-1"></i>
-                                Create
-
-                            </button>
-
-                            <a asp-action="Index"
-                               class="btn btn-secondary">
-
-                                Cancel
-
-                            </a>
-
-                        </div>
-
-                    </form>
-
-                </div>
+                <span>Create Center</span>
 
             </div>
 
+            <h2>Create Service Center</h2>
+
+            <p>
+                Add a new service center and define the services it provides.
+            </p>
+
+        </div>
+
+
+        <div class="create-center-icon">
+            <i class="bi bi-building-add"></i>
         </div>
 
     </div>
 
+
+    <!-- Form -->
+
+    <div class="create-center-form-wrapper">
+
+        <form asp-action="Create" method="post">
+
+            @Html.AntiForgeryToken()
+
+
+            <div asp-validation-summary="ModelOnly"
+                 class="validation-summary">
+            </div>
+
+
+            <!-- Basic Information -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <div class="section-icon">
+                        <i class="bi bi-building"></i>
+                    </div>
+
+                    <div>
+                        <h5>Basic Information</h5>
+                        <span>
+                            General information about the service center
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <!-- Name -->
+
+                    <div class="form-field full-field">
+
+                        <label asp-for="Name">
+                            Service Center Name
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="bi bi-building"></i>
+
+                            <input asp-for="Name"
+                                   placeholder="Enter service center name" />
+
+                        </div>
+
+                        <span asp-validation-for="Name"
+                              class="field-error">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Phone -->
+
+                    <div class="form-field">
+
+                        <label asp-for="PhoneNumber">
+                            Phone Number
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="bi bi-telephone"></i>
+
+                            <input asp-for="PhoneNumber"
+                                   placeholder="e.g. 01012345678" />
+
+                        </div>
+
+                        <span asp-validation-for="PhoneNumber"
+                              class="field-error">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Email -->
+
+                    <div class="form-field">
+
+                        <label asp-for="Email">
+                            Email Address
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="bi bi-envelope"></i>
+
+                            <input asp-for="Email"
+                                   type="email"
+                                   placeholder="center@example.com" />
+
+                        </div>
+
+                        <span asp-validation-for="Email"
+                              class="field-error">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Location -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <div class="section-icon location-icon">
+                        <i class="bi bi-geo-alt"></i>
+                    </div>
+
+                    <div>
+                        <h5>Location</h5>
+                        <span>
+                            Where the service center is located
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div class="form-field">
+
+                    <label asp-for="Address">
+                        Address
+                    </label>
+
+                    <div class="textarea-wrapper">
+
+                        <i class="bi bi-geo-alt"></i>
+
+                        <textarea asp-for="Address"
+                                  rows="3"
+                                  placeholder="Enter full service center address">
+                        </textarea>
+
+                    </div>
+
+                    <span asp-validation-for="Address"
+                          class="field-error">
+                    </span>
+
+                </div>
+
+            </section>
+
+
+            <!-- Services -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <div class="section-icon service-icon">
+                        <i class="bi bi-tools"></i>
+                    </div>
+
+                    <div>
+                        <h5>Available Services</h5>
+                        <span>
+                            Select the services provided by this center
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div class="services-selection">
+
+                    @foreach (var category in
+                                        (IEnumerable<SelectListItem>)ViewBag.ServiceCategories)
+                    {
+                        <label class="service-option"
+                               for="category_@category.Value">
+
+                            <input class="service-checkbox"
+                                   type="checkbox"
+                                   name="SelectedServiceCategoryIds"
+                                   value="@category.Value"
+                                   id="category_@category.Value"
+                                   @(category.Selected ? "checked" : "") />
+
+                            <span class="custom-checkbox">
+                                <i class="bi bi-check"></i>
+                            </span>
+
+                            <span class="service-name">
+                                @category.Text
+                            </span>
+
+                            <i class="bi bi-tools service-option-icon"></i>
+
+                        </label>
+                    }
+
+                </div>
+
+
+                <div class="services-hint">
+
+                    <i class="bi bi-info-circle"></i>
+
+                    <span>
+                        Select all maintenance and repair services
+                        available at this center.
+                    </span>
+
+                </div>
+
+            </section>
+
+
+            <!-- Status -->
+
+            <section class="form-section status-section">
+
+                <div class="status-content">
+
+                    <div class="status-left">
+
+                        <div class="section-icon active-icon">
+                            <i class="bi bi-toggle-on"></i>
+                        </div>
+
+                        <div>
+
+                            <h5>Service Center Status</h5>
+
+                            <span>
+                                Set whether this center is currently available
+                                for fleet maintenance.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <label class="status-switch">
+
+                        <input asp-for="IsActive" />
+
+                        <span class="switch-slider"></span>
+
+                        <span class="switch-label">
+                            Active
+                        </span>
+
+                    </label>
+
+                </div>
+
+            </section>
+
+
+            <!-- Actions -->
+
+            <div class="form-actions">
+
+                <a asp-action="Index"
+                   class="cancel-btn">
+
+                    <i class="bi bi-arrow-left"></i>
+
+                    Back to Service Centers
+
+                </a>
+
+
+                <button type="submit"
+                        class="create-btn">
+
+                    <i class="bi bi-building-add"></i>
+
+                    Create Service Center
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
 </div>
+
 
 @section Scripts {
 
     <partial name="_ValidationScriptsPartial" />
 
 }
+<style>
+
+                    /* =========================================
+   Create Service Center
+========================================= */
+
+.create-center-page {
+    width: 100%;
+    padding: 28px 35px 45px;
+}
+
+
+/* =========================================
+   Header
+========================================= */
+
+.create-center-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.page-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 9px;
+    font-size: 12px;
+    color: #9aa3ab;
+}
+
+.page-breadcrumb a {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #198754;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.page-breadcrumb a:hover {
+    color: #157347;
+}
+
+.page-breadcrumb i {
+    font-size: 9px;
+}
+
+.create-center-header h2 {
+    margin: 0;
+    color: #263238;
+    font-size: 28px;
+    font-weight: 750;
+    letter-spacing: -0.5px;
+}
+
+.create-center-header p {
+    margin: 6px 0 0;
+    color: #8a949d;
+    font-size: 13px;
+}
+
+.create-center-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eaf8f0;
+    color: #198754;
+    font-size: 25px;
+}
+
+
+/* =========================================
+   Form Wrapper
+========================================= */
+
+.create-center-form-wrapper {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #edf0f2;
+    border-radius: 20px;
+    padding: 10px 32px 30px;
+    box-shadow: 0 8px 30px rgba(35, 45, 55, 0.04);
+}
+
+
+/* =========================================
+   Sections
+========================================= */
+
+.form-section {
+    padding: 27px 0;
+    border-bottom: 1px solid #edf0f2;
+}
+
+.form-section:last-of-type {
+    border-bottom: none;
+}
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 23px;
+}
+
+.section-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eaf8f0;
+    color: #198754;
+    font-size: 17px;
+}
+
+.location-icon {
+    background: #edf6ff;
+    color: #0d6efd;
+}
+
+.service-icon {
+    background: #fff5e8;
+    color: #fd7e14;
+}
+
+.active-icon {
+    background: #eaf8f0;
+    color: #198754;
+}
+
+.section-heading h5 {
+    margin: 0 0 3px;
+    color: #303940;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.section-heading span {
+    color: #929ba3;
+    font-size: 11px;
+}
+
+
+/* =========================================
+   Form Grid
+========================================= */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 25px;
+}
+
+.full-field {
+    grid-column: 1 / -1;
+}
+
+.form-field label {
+    display: block;
+    margin-bottom: 8px;
+    color: #4a555e;
+    font-size: 12px;
+    font-weight: 650;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.input-wrapper > i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a4adb5;
+    font-size: 15px;
+    pointer-events: none;
+}
+
+.input-wrapper input {
+    width: 100%;
+    height: 46px;
+    border: 1px solid #e1e6e9;
+    border-radius: 10px;
+    background: #fafbfc;
+    color: #35404a;
+    font-size: 13px;
+    padding: 0 14px 0 42px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.input-wrapper input::placeholder {
+    color: #b1b8be;
+}
+
+.input-wrapper input:focus {
+    background: #ffffff;
+    border-color: #198754;
+    box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.08);
+}
+
+.input-wrapper:focus-within > i {
+    color: #198754;
+}
+
+
+/* =========================================
+   Textarea
+========================================= */
+
+.textarea-wrapper {
+    position: relative;
+}
+
+.textarea-wrapper > i {
+    position: absolute;
+    top: 15px;
+    left: 14px;
+    color: #a4adb5;
+    font-size: 15px;
+    pointer-events: none;
+}
+
+.textarea-wrapper textarea {
+    width: 100%;
+    resize: vertical;
+    min-height: 95px;
+    border: 1px solid #e1e6e9;
+    border-radius: 10px;
+    background: #fafbfc;
+    color: #35404a;
+    font-size: 13px;
+    padding: 13px 14px 13px 42px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.textarea-wrapper textarea::placeholder {
+    color: #b1b8be;
+}
+
+.textarea-wrapper textarea:focus {
+    background: #ffffff;
+    border-color: #198754;
+    box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.08);
+}
+
+.textarea-wrapper:focus-within > i {
+    color: #198754;
+}
+
+
+/* =========================================
+   Services
+========================================= */
+
+.services-selection {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.service-option {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 54px;
+    padding: 10px 13px;
+    border: 1px solid #e6eaed;
+    border-radius: 12px;
+    background: #fafbfc;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.service-option:hover {
+    border-color: #b8dfca;
+    background: #f7fcf9;
+    transform: translateY(-1px);
+}
+
+.service-checkbox {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.custom-checkbox {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    border: 1.5px solid #ccd3d8;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    color: #ffffff;
+    font-size: 11px;
+    transition: all 0.2s ease;
+}
+
+.service-checkbox:checked + .custom-checkbox {
+    background: #198754;
+    border-color: #198754;
+}
+
+.service-checkbox:checked + .custom-checkbox i {
+    opacity: 1;
+}
+
+.custom-checkbox i {
+    opacity: 0;
+}
+
+.service-checkbox:checked ~ .service-name {
+    color: #198754;
+    font-weight: 700;
+}
+
+.service-checkbox:checked ~ .service-option-icon {
+    color: #198754;
+}
+
+.service-option:has(.service-checkbox:checked) {
+    border-color: #a9d8bb;
+    background: #f5fbf7;
+}
+
+.service-name {
+    flex: 1;
+    color: #505b64;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.service-option-icon {
+    color: #b4bcc2;
+    font-size: 13px;
+    transition: color 0.2s ease;
+}
+
+.services-hint {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 13px;
+    color: #929ba3;
+    font-size: 10px;
+}
+
+.services-hint i {
+    color: #198754;
+    font-size: 12px;
+}
+
+
+/* =========================================
+   Status
+========================================= */
+
+.status-section {
+    padding-bottom: 25px;
+}
+
+.status-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.status-left {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.status-left h5 {
+    margin: 0 0 3px;
+    color: #303940;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.status-left span {
+    color: #929ba3;
+    font-size: 11px;
+}
+
+
+/* =========================================
+   Switch
+========================================= */
+
+.status-switch {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    cursor: pointer;
+}
+
+.status-switch input {
+    display: none;
+}
+
+.switch-slider {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    border-radius: 20px;
+    background: #d9dee2;
+    transition: all 0.2s ease;
+}
+
+.switch-slider::after {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    left: 3px;
+    top: 3px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    transition: all 0.2s ease;
+}
+
+.status-switch input:checked + .switch-slider {
+    background: #198754;
+}
+
+.status-switch input:checked + .switch-slider::after {
+    transform: translateX(20px);
+}
+
+.switch-label {
+    color: #68747d;
+    font-size: 11px;
+    font-weight: 650;
+}
+
+
+/* =========================================
+   Validation
+========================================= */
+
+.field-error {
+    display: block;
+    margin-top: 5px;
+    color: #dc3545;
+    font-size: 10px;
+}
+
+.validation-summary {
+    margin: 18px 0 5px;
+    padding: 12px 15px;
+    border-radius: 10px;
+    background: #fff4f4;
+    border: 1px solid #f5d0d0;
+    color: #dc3545;
+    font-size: 12px;
+}
+
+
+/* =========================================
+   Actions
+========================================= */
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 27px;
+}
+
+.cancel-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 18px;
+    border: 1px solid #e1e5e8;
+    border-radius: 10px;
+    color: #68747d;
+    background: #ffffff;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.cancel-btn:hover {
+    color: #343d44;
+    background: #f8f9fa;
+    border-color: #d5dadd;
+}
+
+.create-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    height: 44px;
+    padding: 0 21px;
+    border: none;
+    border-radius: 10px;
+    background: #198754;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 650;
+    cursor: pointer;
+    box-shadow: 0 5px 14px rgba(25, 135, 84, 0.18);
+    transition: all 0.2s ease;
+}
+
+.create-btn:hover {
+    background: #157347;
+    transform: translateY(-1px);
+    box-shadow: 0 7px 18px rgba(25, 135, 84, 0.24);
+}
+
+
+/* =========================================
+   Responsive
+========================================= */
+@@media (max-width: 900px) {
+
+    .services-selection {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@@media (max-width: 768px) {
+
+    .create-center-page {
+        padding: 20px 15px 35px;
+    }
+
+    .create-center-header {
+        align-items: flex-start;
+    }
+
+    .create-center-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+    }
+
+    .create-center-header h2 {
+        font-size: 22px;
+    }
+
+    .create-center-form-wrapper {
+        padding: 5px 18px 25px;
+        border-radius: 15px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .full-field {
+        grid-column: auto;
+    }
+
+    .services-selection {
+        grid-template-columns: 1fr;
+    }
+
+    .status-content {
+        align-items: flex-start;
+        gap: 20px;
+        flex-direction: column;
+    }
+
+    .form-actions {
+        gap: 10px;
+    }
+
+    .cancel-btn,
+    .create-btn {
+        flex: 1;
+        justify-content: center;
+    }
+}
+</style>

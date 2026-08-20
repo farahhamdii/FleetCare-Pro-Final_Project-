@@ -4,119 +4,935 @@
 @{
     ViewData["Title"] = "Add New Vehicle";
 }
-@if (ViewBag.Errors != null)
-{
-    <div class="alert alert-danger">
-        @foreach (var error in ViewBag.Errors)
-        {
-            <div>@error</div>
-        }
-    </div>
-}
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm border-0 rounded-3">
-                <div class="card-header bg-primary text-white py-3">
-                    <h4 class="mb-0"><i class="bi bi-car-front-fill me-2"></i>Add New Vehicle</h4>
-                </div>
-                <div class="card-body p-4">
-                    <form asp-controller="Vehicle" asp-action="Create" method="post" enctype="multipart/form-data">
-                        @Html.AntiForgeryToken()
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
-                        <div class="row g-3">
-                            <!-- VIN -->
-                            <div class="col-md-6">
-                                <label asp-for="VIN" class="form-label fw-semibold">VIN (Vehicle Identification Number)</label>
-                                <input asp-for="VIN" class="form-control" placeholder="17-character VIN" />
-                                <span asp-validation-for="VIN" class="text-danger small"></span>
-                            </div>
+<div class="create-vehicle-page">
 
-                            <!-- License Plate -->
-                            <div class="col-md-6">
-                                <label asp-for="LicensePlate" class="form-label fw-semibold">License Plate</label>
-                                <input asp-for="LicensePlate" class="form-control" placeholder="e.g. ABC-1234" />
-                                <span asp-validation-for="LicensePlate" class="text-danger small"></span>
-                            </div>
+    <!-- Header -->
+    <div class="create-vehicle-header">
 
-                            <!-- Make -->
-                            <div class="col-md-6">
-                                <label asp-for="Make" class="form-label fw-semibold">Make</label>
-                                <input asp-for="Make" class="form-control" placeholder="e.g. Toyota" />
-                                <span asp-validation-for="Make" class="text-danger small"></span>
-                            </div>
+        <div>
 
-                            <!-- Model -->
-                            <div class="col-md-6">
-                                <label asp-for="Model" class="form-label fw-semibold">Model</label>
-                                <input asp-for="Model" class="form-control" placeholder="e.g. Camry" />
-                                <span asp-validation-for="Model" class="text-danger small"></span>
-                            </div>
+            <div class="page-breadcrumb">
 
-                            <!-- Year -->
-                            <div class="col-md-4">
-                                <label asp-for="Year" class="form-label fw-semibold">Year</label>
-                                <input asp-for="Year"
-                                       type="number"
-                                       class="form-control"
-                                       placeholder="@DateTime.Now.Year" />
-                                <span asp-validation-for="Year" class="text-danger small"></span>
-                            </div>
+                <a asp-action="Index">
+                    <i class="bi bi-car-front-fill"></i>
+                    Vehicles
+                </a>
 
-                            <!-- Mileage -->
-                            <div class="col-md-4">
-                                <label asp-for="Mileage" class="form-label fw-semibold">Current Mileage (km)</label>
-                                <input asp-for="Mileage" type="number" class="form-control" placeholder="0" />
-                                <span asp-validation-for="Mileage" class="text-danger small"></span>
-                            </div>
+                <i class="bi bi-chevron-right"></i>
 
-                            <!-- Purchase Price -->
-                            <div class="col-md-4">
-                                <label asp-for="PurchasePrice" class="form-label fw-semibold">Purchase Price ($)</label>
-                                <input asp-for="PurchasePrice" type="number" step="0.01" class="form-control" placeholder="0.00" />
-                                <span asp-validation-for="PurchasePrice" class="text-danger small"></span>
-                            </div>
+                <span>Add Vehicle</span>
 
-                            <!-- Status -->
-                            <div class="col-md-6">
-                                <label asp-for="Status" class="form-label fw-semibold">Status</label>
-                                <select asp-for="Status" asp-items="Html.GetEnumSelectList<VehicleStatus>()" class="form-select"></select>
-                                <span asp-validation-for="Status" class="text-danger small"></span>
-                            </div>
-
-                            <!-- Driver Assignment (Optional) -->
-                            <div class="col-md-6">
-                                <label asp-for="DriverId" class="form-label fw-semibold">Assign Driver</label>
-                                <select asp-for="DriverId" asp-items="ViewBag.Drivers" class="form-select">
-                                    <option value="">-- No Driver Assigned --</option>
-                                </select>
-                                <span asp-validation-for="DriverId" class="text-danger small"></span>
-                            </div>
-
-                            <!-- Image Upload -->
-                            <div class="col-12">
-                                <label asp-for="VehicleImage" class="form-label fw-semibold">Vehicle Photo</label>
-                                <input asp-for="VehicleImage" type="file" class="form-control" accept="image/*" />
-                                <span asp-validation-for="VehicleImage" class="text-danger small"></span>
-                            </div>
-                        </div>
-
-                        <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
-                            <a asp-action="Index" class="btn btn-outline-secondary">
-                                <i class="bi bi-arrow-left"></i> Back to List
-                            </a>
-                            <button type="submit" class="btn btn-primary px-4">
-                                <i class="bi bi-check-circle me-1"></i> Save Vehicle
-                            </button>
-                        </div>
-                    </form>
-                </div>
             </div>
+
+            <h2>Add New Vehicle</h2>
+
+            <p>
+                Register a new vehicle and add it to the FleetCarePro fleet.
+            </p>
+
         </div>
+
+
+        <div class="create-vehicle-icon">
+            <i class="bi bi-car-front-fill"></i>
+        </div>
+
     </div>
+
+
+    <!-- Form -->
+
+    <div class="create-vehicle-form-wrapper">
+
+        <form asp-controller="Vehicle"
+              asp-action="Create"
+              method="post"
+              enctype="multipart/form-data">
+
+            @Html.AntiForgeryToken()
+
+
+            <!-- Errors -->
+            @if (ViewBag.Errors != null)
+            {
+                <div class="custom-validation-summary">
+
+                    <div class="error-icon">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Unable to save vehicle
+                        </strong>
+
+                        @foreach (var error in ViewBag.Errors)
+                        {
+                            <span>@error</span>
+                        }
+
+                    </div>
+
+                </div>
+            }
+
+
+            <div asp-validation-summary="ModelOnly"
+                 class="custom-validation-summary">
+            </div>
+
+
+            <!-- Vehicle Identity -->
+
+            <section class="vehicle-form-section">
+
+                <div class="vehicle-section-heading">
+
+                    <div class="vehicle-section-icon identity-icon">
+                        <i class="bi bi-card-text"></i>
+                    </div>
+
+                    <div>
+
+                        <h5>Vehicle Identity</h5>
+
+                        <span>
+                            Identification details of the vehicle
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="vehicle-form-grid">
+
+                    <!-- VIN -->
+
+                    <div class="vehicle-form-field">
+
+                        <label asp-for="VIN">
+                            VIN
+                            <small>Vehicle Identification Number</small>
+                        </label>
+
+                        <div class="vehicle-input">
+
+                            <i class="bi bi-upc-scan"></i>
+
+                            <input asp-for="VIN"
+                                   placeholder="17-character VIN" />
+
+                        </div>
+
+                        <span asp-validation-for="VIN"
+                              class="vehicle-field-error">
+                        </span>
+
+                    </div>
+
+
+                    <!-- License Plate -->
+
+                    <div class="vehicle-form-field">
+
+                        <label asp-for="LicensePlate">
+                            License Plate
+                        </label>
+
+                        <div class="vehicle-input">
+
+                            <i class="bi bi-credit-card-2-front"></i>
+
+                            <input asp-for="LicensePlate"
+                                   placeholder="e.g. ABC-1234" />
+
+                        </div>
+
+                        <span asp-validation-for="LicensePlate"
+                              class="vehicle-field-error">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Make -->
+
+                    <div class="vehicle-form-field">
+
+                        <label asp-for="Make">
+                            Make
+                        </label>
+
+                        <div class="vehicle-input">
+
+                            <i class="bi bi-building"></i>
+
+                            <input asp-for="Make"
+                                   placeholder="e.g. Toyota" />
+
+                        </div>
+
+                        <span asp-validation-for="Make"
+                              class="vehicle-field-error">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Model -->
+
+                    <div class="vehicle-form-field">
+
+                        <label asp-for="Model">
+                            Model
+                        </label>
+
+                        <div class="vehicle-input">
+
+                            <i class="bi bi-car-front"></i>
+
+                            <input asp-for="Model"
+                                   placeholder="e.g. Camry" />
+
+                        </div>
+
+                        <span asp-validation-for="Model"
+                              class="vehicle-field-error">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Vehicle Details -->
+
+            <section class="vehicle-form-section">
+
+                <div class="vehicle-section-heading">
+
+                    <div class="vehicle-section-icon details-icon">
+                        <i class="bi bi-speedometer2"></i>
+                    </div>
+
+                    <div>
+
+                        <h5>Vehicle Details</h5>
+
+                        <span>
+                            Purchase, mileage and operational information
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="vehicle-form-grid vehicle-three-columns">
+
+                    <!-- Year -->
+
+                    <div class="vehicle-form-field">
+
+                        <label asp-for="Year">
+                            Manufacturing Year
+                        </label>
+
+                        <div class="vehicle-input">
+
+                            <i class="bi bi-calendar3"></i>
+
+                            <input asp-for="Year"
+                                   type="number"
+                                   placeholder="@DateTime.Now.Year" />
+
+                        </div>
+
+                        <span asp-validation-for="Year"
+                              class="vehicle-field-error">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Mileage -->
+
+                    <div class="vehicle-form-field">
+
+                        <label asp-for="Mileage">
+                            Current Mileage
+                        </label>
+
+                        <div class="vehicle-input">
+
+                            <i class="bi bi-speedometer"></i>
+
+                            <input asp-for="Mileage"
+                                   type="number"
+                                   placeholder="0" />
+
+                            <span class="input-suffix">
+                                km
+                            </span>
+
+                        </div>
+
+                        <span asp-validation-for="Mileage"
+                              class="vehicle-field-error">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Purchase Price -->
+
+                    <div class="vehicle-form-field">
+
+                        <label asp-for="PurchasePrice">
+                            Purchase Price
+                        </label>
+
+                        <div class="vehicle-input">
+
+                            <i class="bi bi-cash-stack"></i>
+
+                            <input asp-for="PurchasePrice"
+                                   type="number"
+                                   step="0.01"
+                                   placeholder="0.00" />
+
+                            <span class="input-suffix">
+                                EGP
+                            </span>
+
+                        </div>
+
+                        <span asp-validation-for="PurchasePrice"
+                              class="vehicle-field-error">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Assignment & Status -->
+
+            <section class="vehicle-form-section">
+
+                <div class="vehicle-section-heading">
+
+                    <div class="vehicle-section-icon management-icon">
+                        <i class="bi bi-gear-wide-connected"></i>
+                    </div>
+
+                    <div>
+
+                        <h5>Assignment & Status</h5>
+
+                        <span>
+                            Configure the vehicle's current operational state
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="vehicle-form-grid">
+
+                    <!-- Status -->
+
+                    <div class="vehicle-form-field">
+
+                        <label asp-for="Status">
+                            Vehicle Status
+                        </label>
+
+                        <div class="vehicle-select">
+
+                            <i class="bi bi-activity"></i>
+
+                            <select asp-for="Status"
+                                    asp-items="Html.GetEnumSelectList<VehicleStatus>()">
+                            </select>
+
+                            <i class="bi bi-chevron-down select-arrow"></i>
+
+                        </div>
+
+                        <span asp-validation-for="Status"
+                              class="vehicle-field-error">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Driver -->
+
+                    <div class="vehicle-form-field">
+
+                        <label asp-for="DriverId">
+                            Assigned Driver
+                            <small>Optional</small>
+                        </label>
+
+                        <div class="vehicle-select">
+
+                            <i class="bi bi-person-badge"></i>
+
+                            <select asp-for="DriverId"
+                                    asp-items="ViewBag.Drivers">
+
+                                <option value="">
+                                    -- No Driver Assigned --
+                                </option>
+
+                            </select>
+
+                            <i class="bi bi-chevron-down select-arrow"></i>
+
+                        </div>
+
+                        <span asp-validation-for="DriverId"
+                              class="vehicle-field-error">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <div class="col-12">
+                <label asp-for="VehicleImage" class="form-label fw-semibold">Vehicle Photo</label>
+                <input asp-for="VehicleImage" type="file" class="form-control" accept="image/*" />
+                <span asp-validation-for="VehicleImage" class="text-danger small"></span>
+            </div>
+
+
+            <!-- Actions -->
+
+            <div class="vehicle-form-actions">
+
+                <a asp-action="Index"
+                   class="vehicle-cancel-btn">
+
+                    <i class="bi bi-arrow-left"></i>
+
+                    Back to Vehicles
+
+                </a>
+
+
+                <button type="submit"
+                        class="vehicle-save-btn">
+
+                    <i class="bi bi-check-circle"></i>
+
+                    Save Vehicle
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
 </div>
 
+
 @section Scripts {
+
     <partial name="_ValidationScriptsPartial" />
+
 }
+<style>
+
+                    /* =========================================
+   CREATE VEHICLE PAGE
+========================================= */
+
+.create-vehicle-page {
+    width: 100%;
+    padding: 28px 35px 45px;
+}
+
+
+/* =========================================
+   Header
+========================================= */
+
+.create-vehicle-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.page-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 9px;
+    font-size: 12px;
+    color: #9aa3ab;
+}
+
+.page-breadcrumb a {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #198754;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.page-breadcrumb a:hover {
+    color: #157347;
+}
+
+.page-breadcrumb i {
+    font-size: 9px;
+}
+
+.create-vehicle-header h2 {
+    margin: 0;
+    color: #263238;
+    font-size: 28px;
+    font-weight: 750;
+    letter-spacing: -0.5px;
+}
+
+.create-vehicle-header p {
+    margin: 6px 0 0;
+    color: #8a949d;
+    font-size: 13px;
+}
+
+.create-vehicle-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Yellow accent */
+    background: #fff8df;
+    color: #d99a00;
+
+    font-size: 25px;
+}
+
+
+/* =========================================
+   Form Wrapper
+========================================= */
+
+.create-vehicle-form-wrapper {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #edf0f2;
+    border-radius: 20px;
+    padding: 10px 32px 30px;
+    box-shadow: 0 8px 30px rgba(35, 45, 55, 0.04);
+}
+
+
+/* =========================================
+   Sections
+========================================= */
+
+.vehicle-form-section {
+    padding: 27px 0;
+    border-bottom: 1px solid #edf0f2;
+}
+
+.vehicle-form-section:last-of-type {
+    border-bottom: none;
+}
+
+.vehicle-section-heading {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 23px;
+}
+
+.vehicle-section-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #fff8df;
+    color: #d99a00;
+
+    font-size: 17px;
+}
+
+.identity-icon {
+    background: #fff8df;
+    color: #d99a00;
+}
+
+.details-icon {
+    background: #fff5dc;
+    color: #d99a00;
+}
+
+.management-icon {
+    background: #eaf8f0;
+    color: #198754;
+}
+
+.photo-icon {
+    background: #edf6ff;
+    color: #0d6efd;
+}
+
+.vehicle-section-heading h5 {
+    margin: 0 0 3px;
+    color: #303940;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.vehicle-section-heading span {
+    color: #929ba3;
+    font-size: 11px;
+}
+
+
+/* =========================================
+   Form Grid
+========================================= */
+
+.vehicle-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 25px;
+}
+
+.vehicle-three-columns {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.vehicle-form-field label {
+    display: block;
+    margin-bottom: 8px;
+    color: #4a555e;
+    font-size: 12px;
+    font-weight: 650;
+}
+
+.vehicle-form-field label small {
+    margin-left: 5px;
+    color: #a0a8ae;
+    font-size: 9px;
+    font-weight: 500;
+}
+
+
+/* =========================================
+   Inputs
+========================================= */
+
+.vehicle-input {
+    position: relative;
+}
+
+.vehicle-input > i:first-child {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a4adb5;
+    font-size: 15px;
+    pointer-events: none;
+}
+
+.vehicle-input input {
+    width: 100%;
+    height: 46px;
+    border: 1px solid #e1e6e9;
+    border-radius: 10px;
+    background: #fafbfc;
+    color: #35404a;
+    font-size: 13px;
+    padding: 0 14px 0 42px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.vehicle-input input::placeholder {
+    color: #b1b8be;
+}
+
+.vehicle-input input:focus {
+    background: #ffffff;
+
+    /* Yellow focus */
+    border-color: #e0ad18;
+
+    box-shadow: 0 0 0 3px rgba(224, 173, 24, 0.10);
+}
+
+.vehicle-input:focus-within > i:first-child {
+    color: #d99a00;
+}
+
+
+/* =========================================
+   Input Suffix
+========================================= */
+
+.input-suffix {
+    position: absolute;
+    right: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    padding: 4px 7px;
+    border-radius: 6px;
+
+    background: #fff8df;
+    color: #b27d00;
+
+    font-size: 9px;
+    font-weight: 700;
+}
+
+
+/* =========================================
+   Select
+========================================= */
+
+.vehicle-select {
+    position: relative;
+}
+
+.vehicle-select > i:first-child {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a4adb5;
+    font-size: 15px;
+    pointer-events: none;
+}
+
+.vehicle-select select {
+    width: 100%;
+    height: 46px;
+    appearance: none;
+    border: 1px solid #e1e6e9;
+    border-radius: 10px;
+    background: #fafbfc;
+    color: #35404a;
+    font-size: 13px;
+    padding: 0 40px 0 42px;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.vehicle-select select:focus {
+    background: #ffffff;
+    border-color: #198754;
+    box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.08);
+}
+
+.select-arrow {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ba4ab;
+    font-size: 10px;
+    pointer-events: none;
+}
+
+
+
+
+
+/* =========================================
+   Validation
+========================================= */
+
+.vehicle-field-error {
+    display: block;
+    margin-top: 5px;
+    color: #dc3545;
+    font-size: 10px;
+}
+
+.custom-validation-summary {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+
+    margin: 18px 0 5px;
+    padding: 13px 15px;
+
+    border-radius: 11px;
+
+    background: #fff4f4;
+    border: 1px solid #f5d0d0;
+
+    color: #dc3545;
+    font-size: 11px;
+}
+
+.custom-validation-summary .error-icon {
+    flex-shrink: 0;
+    font-size: 15px;
+}
+
+.custom-validation-summary strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.custom-validation-summary span {
+    display: block;
+}
+
+
+/* =========================================
+   Actions
+========================================= */
+
+.vehicle-form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding-top: 27px;
+}
+
+.vehicle-cancel-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    height: 44px;
+    padding: 0 18px;
+
+    border: 1px solid #e1e5e8;
+    border-radius: 10px;
+
+    color: #68747d;
+    background: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    transition: all 0.2s ease;
+}
+
+.vehicle-cancel-btn:hover {
+    color: #343d44;
+    background: #f8f9fa;
+    border-color: #d5dadd;
+}
+
+.vehicle-save-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+
+    height: 44px;
+    padding: 0 21px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #198754;
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 650;
+
+    cursor: pointer;
+
+    box-shadow: 0 5px 14px rgba(25, 135, 84, 0.18);
+
+    transition: all 0.2s ease;
+}
+
+.vehicle-save-btn:hover {
+    background: #157347;
+    transform: translateY(-1px);
+    box-shadow: 0 7px 18px rgba(25, 135, 84, 0.24);
+}
+
+
+/* =========================================
+   Responsive
+========================================= */
+
+@@media (max-width: 900px) {
+
+    .vehicle-three-columns {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@@media (max-width: 768px) {
+
+    .create-vehicle-page {
+        padding: 20px 15px 35px;
+    }
+
+    .create-vehicle-header {
+        align-items: flex-start;
+    }
+
+    .create-vehicle-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+    }
+
+    .create-vehicle-header h2 {
+        font-size: 22px;
+    }
+
+    .create-vehicle-form-wrapper {
+        padding: 5px 18px 25px;
+        border-radius: 15px;
+    }
+
+    .vehicle-form-grid,
+    .vehicle-three-columns {
+        grid-template-columns: 1fr;
+    }
+
+    .vehicle-form-actions {
+        gap: 10px;
+    }
+
+    .vehicle-cancel-btn,
+    .vehicle-save-btn {
+        flex: 1;
+        justify-content: center;
+    }
+}
+</style>

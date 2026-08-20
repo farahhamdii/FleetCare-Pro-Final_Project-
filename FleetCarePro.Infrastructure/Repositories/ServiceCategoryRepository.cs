@@ -39,7 +39,11 @@ public class ServiceCategoryRepository : IServiceCategoryRepository
     {
         _context.ServiceCategories.Remove(category);
     }
-
+    public async Task<bool> HasServiceLineItemsAsync(int categoryId)
+    {
+        return await _context.ServiceLineItems
+            .AnyAsync(x => x.ServiceCategoryId == categoryId);
+    }
     public async Task SaveChangesAsync()
     {
         await _context.SaveChangesAsync();

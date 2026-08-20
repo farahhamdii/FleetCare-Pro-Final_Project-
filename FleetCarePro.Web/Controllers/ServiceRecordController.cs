@@ -382,9 +382,7 @@ public class ServiceRecordController : Controller
         EditServiceRecordViewModel model)
     {
         var vehicles =await _vehicleService.GetAllAsync();
-
         var serviceCenters =await _serviceCenterService.GetAllAsync();
-
         var categories = await _serviceCategoryService.GetAllAsync();
 
         ViewBag.Vehicles =

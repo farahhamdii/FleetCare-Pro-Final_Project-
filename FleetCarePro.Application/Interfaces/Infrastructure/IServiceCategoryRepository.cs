@@ -14,5 +14,7 @@ public interface IServiceCategoryRepository
 
     void Delete(ServiceCategory category);
 
+    Task<bool> HasServiceLineItemsAsync(int categoryId);
+
     Task SaveChangesAsync();
 }

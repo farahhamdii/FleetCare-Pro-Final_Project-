@@ -16,21 +16,22 @@ namespace FleetCarePro.Web.Controllers;
 public class VehicleController : Controller
 {
     private readonly IVehicleService _vehicleService;
-    private readonly IWebHostEnvironment _environment;
+    private readonly IFileService _fileService;
     private readonly IMapper _mapper;
     private readonly UserManager<ApplicationUser> _userManager;
 
     public VehicleController(
         IVehicleService vehicleService,
-        IWebHostEnvironment environment,
+        IFileService fileService,
         IMapper mapper,
         UserManager<ApplicationUser> userManager)
     {
         _vehicleService = vehicleService;
-        _environment = environment;
+        _fileService = fileService;
         _mapper = mapper;
         _userManager = userManager;
     }
+
     private async Task PopulateDriversDropDownListAsync()
     {
         var drivers = await _userManager.GetUsersInRoleAsync("Driver");
@@ -60,6 +61,7 @@ public class VehicleController : Controller
         }
 
         var viewModels = _mapper.Map<IEnumerable<VehicleListViewModel>>(vehicles);
+
         return View(viewModels);
     }
 
@@ -67,12 +69,13 @@ public class VehicleController : Controller
     public async Task<IActionResult> Details(int id)
     {
         VehicleDto? vehicle;
-
         if (User.IsInRole("Driver"))
         {
             var driverId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             if (string.IsNullOrEmpty(driverId))
                 return Forbid();
+
             vehicle = await _vehicleService.GetByIdForDriverAsync(id, driverId);
         }
         else
@@ -82,19 +85,20 @@ public class VehicleController : Controller
 
         if (vehicle == null)
             return NotFound();
+
         var viewModel = _mapper.Map<VehicleDetailsViewModel>(vehicle);
+
         return View(viewModel);
     }
-
 
     [Authorize(Roles = "Admin,FleetManager")]
     [HttpGet]
     public async Task<IActionResult> Create()
     {
         await PopulateDriversDropDownListAsync();
+
         return View();
     }
-
 
     [Authorize(Roles = "Admin,FleetManager")]
     [HttpPost]
@@ -112,12 +116,13 @@ public class VehicleController : Controller
 
         if (vehicle.VehicleImage != null)
         {
-            imageUrl = await SaveVehicleImageAsync(vehicle.VehicleImage);
+            await using var stream = vehicle.VehicleImage.OpenReadStream();
+            imageUrl = await _fileService.UploadAsync( stream,vehicle.VehicleImage.FileName, "vehicles");
         }
 
-        var dto=_mapper.Map<CreateVehicleDto>(vehicle);
+        var dto = _mapper.Map<CreateVehicleDto>(vehicle);
 
-        dto.VehicleImageURL=imageUrl;
+        dto.VehicleImageURL = imageUrl;
 
         await _vehicleService.CreateAsync(dto);
 
@@ -126,21 +131,20 @@ public class VehicleController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-
     [Authorize(Roles = "Admin,FleetManager")]
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
         var vehicle = await _vehicleService.GetByIdAsync(id);
+
         if (vehicle == null)
             return NotFound();
+
         var model = _mapper.Map<EditVehicleViewModel>(vehicle);
         model.ExistingImageUrl = vehicle.VehicleImageURL;
-
         await PopulateDriversDropDownListAsync();
         return View(model);
     }
-
 
     [Authorize(Roles = "Admin,FleetManager")]
     [HttpPost]
@@ -160,24 +164,25 @@ public class VehicleController : Controller
         {
             if (!string.IsNullOrEmpty(vehicle.ExistingImageUrl))
             {
-                DeleteVehicleImage(vehicle.ExistingImageUrl);
+                await _fileService.DeleteAsync(
+                    vehicle.ExistingImageUrl);
             }
 
-            imageUrl = await SaveVehicleImageAsync(vehicle.VehicleImage);
+            await using var stream =vehicle.VehicleImage.OpenReadStream();
+
+            imageUrl = await _fileService.UploadAsync(stream, vehicle.VehicleImage.FileName, "vehicles");
         }
 
         var dto = _mapper.Map<UpdateVehicleDto>(vehicle);
         dto.VehicleImageURL = imageUrl;
+        var success =await _vehicleService.UpdateAsync(vehicle.Id, dto);
 
-        var success = await _vehicleService.UpdateAsync(vehicle.Id, dto);
-
-        if (!success)
-            return NotFound();
+        if (!success)return NotFound();
 
         TempData["SuccessMessage"] = "Vehicle updated successfully.";
+
         return RedirectToAction(nameof(Index));
     }
-
 
     [Authorize(Roles = "Admin,FleetManager")]
     [HttpPost]
@@ -186,55 +191,20 @@ public class VehicleController : Controller
     public async Task<IActionResult> Delete(int id)
     {
         var vehicle = await _vehicleService.GetByIdAsync(id);
-
         if (vehicle == null)
             return NotFound();
-
-        if (!string.IsNullOrEmpty(vehicle.VehicleImageURL))
-        {
-            DeleteVehicleImage(vehicle.VehicleImageURL);
-        }
         var success = await _vehicleService.DeleteAsync(id);
         if (!success)
-            return NotFound();
+        {
+            TempData["ErrorMessage"] ="This vehicle cannot be deleted because it has service records.";
+
+            return RedirectToAction(nameof(Index));
+        }
+        if (!string.IsNullOrEmpty(vehicle.VehicleImageURL))
+        {
+            await _fileService.DeleteAsync(vehicle.VehicleImageURL);
+        }
         TempData["SuccessMessage"] = "Vehicle deleted successfully.";
         return RedirectToAction(nameof(Index));
-    }
-    private async Task<string> SaveVehicleImageAsync(IFormFile image)
-    {
-        var uploadsFolder = Path.Combine(
-            _environment.WebRootPath,
-            "uploads",
-            "vehicles");
-
-        Directory.CreateDirectory(uploadsFolder);
-
-        var extension = Path.GetExtension(image.FileName).ToLowerInvariant();
-        var fileName = $"{Guid.NewGuid()}{extension}";
-        var filePath = Path.Combine(uploadsFolder, fileName);
-
-        await using var stream = new FileStream(filePath, FileMode.Create);
-        await image.CopyToAsync(stream);
-
-        return $"/uploads/vehicles/{fileName}";
-    }
-
-
-    private void DeleteVehicleImage(string imageUrl)
-    {
-        var fileName = Path.GetFileName(imageUrl);
-        if (string.IsNullOrEmpty(fileName))
-            return;
-
-        var filePath = Path.Combine(
-            _environment.WebRootPath,
-            "uploads",
-            "vehicles",
-            fileName);
-
-        if (System.IO.File.Exists(filePath))
-        {
-            System.IO.File.Delete(filePath);
-        }
     }
 }

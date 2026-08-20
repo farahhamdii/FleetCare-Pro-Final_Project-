@@ -4,110 +4,520 @@
     ViewData["Title"] = "Add Service Category";
 }
 
-<div class="container mt-4">
+<style>
+    .category-form-page {
+        padding: 28px 35px 45px;
+    }
 
-    <div class="row justify-content-center">
+    .category-form-header {
+        margin-bottom: 25px;
+    }
 
-        <div class="col-md-8">
+    .category-breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        color: #9aa3ab;
+        font-size: 12px;
+    }
 
-            <div class="card shadow-sm border-0">
+        .category-breadcrumb a {
+            color: #198754;
+            text-decoration: none;
+            font-weight: 600;
+        }
 
-                <div class="card-header bg-dark text-white">
-                    <h4 class="mb-0">
-                        <i class="bi bi-plus-circle me-2"></i>
-                        Add Service Category
-                    </h4>
+    .category-form-header h2 {
+        margin: 0;
+        color: #263238;
+        font-size: 27px;
+        font-weight: 750;
+    }
+
+    .category-form-header p {
+        margin: 5px 0 0;
+        color: #8a949d;
+        font-size: 12px;
+    }
+
+
+    /* Main Card */
+
+    .category-form-card {
+        background: #fff;
+        border: 1px solid #edf0f2;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 8px 30px rgba(35, 45, 55, .04);
+    }
+
+    .category-form-layout {
+        display: grid;
+        grid-template-columns: 30% 70%;
+        min-height: 430px;
+    }
+
+
+    /* Left */
+
+    .category-form-intro {
+        padding: 35px;
+        background: linear-gradient(145deg, #fffdf5, #fafbfc);
+        border-right: 1px solid #edf0f2;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .category-form-icon {
+        width: 75px;
+        height: 75px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff4cf;
+        color: #d99a00;
+        font-size: 31px;
+        margin-bottom: 22px;
+    }
+
+    .category-form-intro h3 {
+        color: #303940;
+        font-size: 20px;
+        font-weight: 750;
+        margin-bottom: 8px;
+    }
+
+    .category-form-intro p {
+        color: #8d979e;
+        font-size: 11px;
+        line-height: 1.7;
+        margin-bottom: 20px;
+    }
+
+    .category-tip {
+        padding: 12px;
+        border-radius: 10px;
+        background: #fff8df;
+        color: #9a710d;
+        font-size: 10px;
+        line-height: 1.6;
+    }
+
+        .category-tip i {
+            margin-right: 5px;
+        }
+
+
+    /* Form */
+
+    .category-form-body {
+        padding: 35px 40px;
+    }
+
+    .form-heading {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        margin-bottom: 25px;
+    }
+
+    .form-heading-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff4cf;
+        color: #d99a00;
+        font-size: 17px;
+    }
+
+    .form-heading h5 {
+        margin: 0 0 3px;
+        color: #303940;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .form-heading span {
+        color: #929ba3;
+        font-size: 10px;
+    }
+
+
+    /* Inputs */
+
+    .form-label {
+        color: #4b565e;
+        font-size: 11px;
+        font-weight: 700;
+        margin-bottom: 7px;
+    }
+
+    .form-control {
+        min-height: 43px;
+        border: 1px solid #e1e6e9;
+        border-radius: 9px;
+        color: #3d474f;
+        font-size: 11px;
+        padding: 10px 12px;
+        box-shadow: none !important;
+        transition: .18s ease;
+    }
+
+    textarea.form-control {
+        min-height: 110px;
+        resize: vertical;
+    }
+
+    .form-control::placeholder {
+        color: #b0b7bc;
+    }
+
+    .form-control:focus {
+        border-color: #e2bd55;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(226, 189, 85, .10) !important;
+    }
+
+    .form-text,
+    small.text-muted {
+        color: #9ba4ab !important;
+        font-size: 9px;
+    }
+
+    .text-danger {
+        font-size: 10px;
+    }
+
+
+    /* Validation */
+
+    .validation-summary-errors {
+        padding: 11px 13px;
+        margin-bottom: 18px;
+        border-radius: 9px;
+        background: #fff0f0;
+        color: #dc3545;
+        font-size: 10px;
+    }
+
+
+    /* Buttons */
+
+    .category-form-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 25px;
+        padding-top: 20px;
+        border-top: 1px solid #edf0f2;
+    }
+
+    .category-back-btn {
+        background: #fff;
+        color: #68747d;
+        border: 1px solid #dfe4e7;
+        border-radius: 8px;
+        font-size: 10px;
+        font-weight: 650;
+    }
+
+        .category-back-btn:hover {
+            background: #f5f6f7;
+            color: #4f5a62;
+        }
+
+    .category-create-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 9px 17px;
+        border: none;
+        border-radius: 8px;
+        background: #198754;
+        color: #fff;
+        font-size: 10px;
+        font-weight: 650;
+        box-shadow: 0 5px 14px rgba(25, 135, 84, .14);
+        transition: .18s ease;
+    }
+
+        .category-create-btn:hover {
+            background: #157347;
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+
+    @@media (max-width: 850px) {
+
+        .category-form-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .category-form-intro {
+            padding: 25px;
+            border-right: none;
+            border-bottom: 1px solid #edf0f2;
+        }
+
+        .category-form-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 25px;
+            margin-bottom: 15px;
+        }
+
+        .category-form-intro h3 {
+            font-size: 18px;
+        }
+    }
+
+
+    @@media (max-width: 600px) {
+
+        .category-form-page {
+            padding: 20px 15px 35px;
+        }
+
+        .category-form-header h2 {
+            font-size: 22px;
+        }
+
+        .category-form-body {
+            padding: 25px 18px;
+        }
+
+        .category-form-actions {
+            gap: 10px;
+        }
+    }
+</style>
+
+
+<div class="category-form-page">
+
+    <!-- Header -->
+
+    <div class="category-form-header">
+
+        <div class="category-breadcrumb">
+
+            <a asp-action="Index">
+
+                <i class="bi bi-tags me-1"></i>
+
+                Service Categories
+
+            </a>
+
+            <i class="bi bi-chevron-right"></i>
+
+            <span>Create</span>
+
+        </div>
+
+        <h2>Add Service Category</h2>
+
+        <p>
+            Create a maintenance category and define its recommended service interval.
+        </p>
+
+    </div>
+
+
+    <!-- Form Card -->
+
+    <div class="category-form-card">
+
+        <div class="category-form-layout">
+
+            <!-- Introduction -->
+
+            <div class="category-form-intro">
+
+                <div class="category-form-icon">
+
+                    <i class="bi bi-tags-fill"></i>
+
                 </div>
 
-                <div class="card-body">
+                <h3>
+                    New Service Category
+                </h3>
 
-                    <form asp-action="Create" method="post">
+                <p>
+                    Add a new maintenance service category that can be assigned
+                    to your fleet and service centers.
+                </p>
 
-                        @Html.AntiForgeryToken()
+                <div class="category-tip">
 
-                        <div asp-validation-summary="ModelOnly"
-                             class="text-danger mb-3">
-                        </div>
+                    <i class="bi bi-lightbulb-fill"></i>
 
-                        <div class="mb-3">
-                            <label asp-for="CategoryName"
-                                   class="form-label fw-semibold">
-                                Category Name
-                            </label>
-
-                            <input asp-for="CategoryName"
-                                   class="form-control"
-                                   placeholder="e.g. Oil Change" />
-
-                            <span asp-validation-for="CategoryName"
-                                  class="text-danger">
-                            </span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="Description"
-                                   class="form-label fw-semibold">
-                                Description
-                            </label>
-
-                            <textarea asp-for="Description"
-                                      class="form-control"
-                                      rows="4"
-                                      placeholder="Enter category description"></textarea>
-
-                            <span asp-validation-for="Description"
-                                  class="text-danger">
-                            </span>
-                        </div>
-
-                        <div class="mb-4">
-                            <label asp-for="RecommendedIntervalMonths"
-                                   class="form-label fw-semibold">
-                                Recommended Interval (Months)
-                            </label>
-
-                            <input asp-for="RecommendedIntervalMonths"
-                                   type="number"
-                                   class="form-control"
-                                   min="1"
-                                   placeholder="e.g. 6" />
-
-                            <span asp-validation-for="RecommendedIntervalMonths"
-                                  class="text-danger">
-                            </span>
-
-                            <small class="text-muted">
-                                How often this service is recommended.
-                            </small>
-                        </div>
-
-                        <div class="d-flex justify-content-between">
-
-                            <a asp-action="Index"
-                               class="btn btn-secondary">
-                                <i class="bi bi-arrow-left me-1"></i>
-                                Back
-                            </a>
-
-                            <button type="submit"
-                                    class="btn btn-primary">
-                                <i class="bi bi-check-circle me-1"></i>
-                                Create Category
-                            </button>
-
-                        </div>
-
-                    </form>
+                    Set a realistic recommended interval so the system
+                    can help track upcoming maintenance.
 
                 </div>
+
+            </div>
+
+
+            <!-- Form -->
+
+            <div class="category-form-body">
+
+                <div class="form-heading">
+
+                    <div class="form-heading-icon">
+
+                        <i class="bi bi-pencil-square"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h5>Category Information</h5>
+
+                        <span>
+                            Enter the details for the new maintenance category.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <form asp-action="Create" method="post">
+
+                    @Html.AntiForgeryToken()
+
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="text-danger">
+                    </div>
+
+
+                    <!-- Category Name -->
+
+                    <div class="mb-4">
+
+                        <label asp-for="CategoryName"
+                               class="form-label">
+
+                            Category Name
+
+                        </label>
+
+                        <input asp-for="CategoryName"
+                               class="form-control"
+                               placeholder="e.g. Oil Change" />
+
+                        <span asp-validation-for="CategoryName"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Description -->
+
+                    <div class="mb-4">
+
+                        <label asp-for="Description"
+                               class="form-label">
+
+                            Description
+
+                        </label>
+
+                        <textarea asp-for="Description"
+                                  class="form-control"
+                                  rows="4"
+                                  placeholder="Enter category description"></textarea>
+
+                        <span asp-validation-for="Description"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- Interval -->
+
+                    <div class="mb-3">
+
+                        <label asp-for="RecommendedIntervalMonths"
+                               class="form-label">
+
+                            Recommended Interval (Months)
+
+                        </label>
+
+                        <input asp-for="RecommendedIntervalMonths"
+                               type="number"
+                               min="1"
+                               class="form-control"
+                               placeholder="e.g. 6" />
+
+                        <span asp-validation-for="RecommendedIntervalMonths"
+                              class="text-danger">
+                        </span>
+
+                        <small class="text-muted">
+
+                            <i class="bi bi-info-circle me-1"></i>
+
+                            How often this service is recommended.
+
+                        </small>
+
+                    </div>
+
+
+                    <!-- Actions -->
+
+                    <div class="category-form-actions">
+
+                        <a asp-action="Index"
+                           class="btn category-back-btn">
+
+                            <i class="bi bi-arrow-left me-1"></i>
+
+                            Back
+
+                        </a>
+
+
+                        <button type="submit"
+                                class="btn category-create-btn">
+
+                            <i class="bi bi-check-circle"></i>
+
+                            Create Category
+
+                        </button>
+
+                    </div>
+
+                </form>
+
             </div>
 
         </div>
+
     </div>
+
 </div>
 
+
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+
+    <partial name="_ValidationScriptsPartial" />
+
 }

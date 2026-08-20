@@ -1,119 +1,233 @@
-﻿
-@model FleetCarePro.Web.ViewModels.Admin.CreateUserViewModel
+﻿@model FleetCarePro.Web.ViewModels.Admin.CreateUserViewModel
 
 @{
     ViewData["Title"] = "Create User";
 }
 
-<div class="container mt-4">
+<div class="create-user-page">
 
-    <div class="row justify-content-center">
-        <div class="col-md-7">
+    <!-- Page Header -->
+    <div class="create-user-header">
 
-            <div class="card shadow-sm border-0 rounded-3">
+        <div>
+            <div class="page-breadcrumb">
+                <a asp-action="Users">
+                    <i class="bi bi-people"></i>
+                    Users
+                </a>
 
-                <div class="card-header bg-primary text-white py-3">
-                    <h4 class="mb-0">
-                        <i class="bi bi-person-plus-fill me-2"></i>
-                        Create New User
-                    </h4>
+                <i class="bi bi-chevron-right"></i>
+
+                <span>Create User</span>
+            </div>
+
+            <h2>
+                Create New User
+            </h2>
+
+            <p>
+                Add a new employee to the FleetCarePro system and assign their access role.
+            </p>
+        </div>
+
+        <div class="create-user-icon">
+            <i class="bi bi-person-plus-fill"></i>
+        </div>
+
+    </div>
+
+
+    <!-- Form -->
+    <div class="create-user-form-wrapper">
+
+        <form asp-action="CreateUser" method="post">
+
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly"
+                 class="validation-summary">
+            </div>
+
+
+            <!-- Personal Information -->
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <div class="section-icon">
+                        <i class="bi bi-person"></i>
+                    </div>
+
+                    <div>
+                        <h5>Personal Information</h5>
+                        <span>Basic information about the employee</span>
+                    </div>
+
                 </div>
 
-                <div class="card-body p-4">
 
-                    <form asp-action="CreateUser" method="post">
+                <div class="form-grid">
 
-                        @Html.AntiForgeryToken()
+                    <div class="form-field full-field">
 
-                        <div asp-validation-summary="ModelOnly"
-                             class="alert alert-danger">
-                        </div>
+                        <label asp-for="FullName">
+                            Full Name
+                        </label>
 
-                        <div class="mb-3">
-                            <label asp-for="FullName"
-                                   class="form-label fw-semibold">
-                                Full Name
-                            </label>
+                        <div class="input-wrapper">
+                            <i class="bi bi-person"></i>
 
                             <input asp-for="FullName"
-                                   class="form-control"
-                                   placeholder="Enter full name" />
-
-                            <span asp-validation-for="FullName"
-                                  class="text-danger">
-                            </span>
+                                   placeholder="Enter employee full name" />
                         </div>
 
-                        <div class="mb-3">
-                            <label asp-for="EmployeeId"
-                                   class="form-label fw-semibold">
-                                Employee ID
-                            </label>
+                        <span asp-validation-for="FullName"
+                              class="field-error">
+                        </span>
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label asp-for="EmployeeId">
+                            Employee ID
+                        </label>
+
+                        <div class="input-wrapper">
+                            <i class="bi bi-person-badge"></i>
 
                             <input asp-for="EmployeeId"
-                                   class="form-control"
                                    placeholder="e.g. EMP004" />
-
-                            <span asp-validation-for="EmployeeId"
-                                  class="text-danger">
-                            </span>
                         </div>
 
-                        <div class="mb-3">
-                            <label asp-for="Email"
-                                   class="form-label fw-semibold">
-                                Email
-                            </label>
+                        <span asp-validation-for="EmployeeId"
+                              class="field-error">
+                        </span>
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label asp-for="Email">
+                            Email Address
+                        </label>
+
+                        <div class="input-wrapper">
+                            <i class="bi bi-envelope"></i>
 
                             <input asp-for="Email"
-                                   class="form-control"
                                    type="email"
                                    placeholder="user@example.com" />
-
-                            <span asp-validation-for="Email"
-                                  class="text-danger">
-                            </span>
                         </div>
 
-                        <div class="mb-3">
-                            <label asp-for="Password"
-                                   class="form-label fw-semibold">
-                                Password
-                            </label>
+                        <span asp-validation-for="Email"
+                              class="field-error">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Security -->
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <div class="section-icon security-icon">
+                        <i class="bi bi-shield-lock"></i>
+                    </div>
+
+                    <div>
+                        <h5>Account Security</h5>
+                        <span>Set the login credentials for this account</span>
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <div class="form-field">
+
+                        <label asp-for="Password">
+                            Password
+                        </label>
+
+                        <div class="input-wrapper">
+                            <i class="bi bi-lock"></i>
 
                             <input asp-for="Password"
-                                   class="form-control"
-                                   type="password" />
-
-                            <span asp-validation-for="Password"
-                                  class="text-danger">
-                            </span>
+                                   type="password"
+                                   placeholder="Enter password" />
                         </div>
 
-                        <div class="mb-3">
-                            <label asp-for="ConfirmPassword"
-                                   class="form-label fw-semibold">
-                                Confirm Password
-                            </label>
+                        <span asp-validation-for="Password"
+                              class="field-error">
+                        </span>
+
+                    </div>
+
+
+                    <div class="form-field">
+
+                        <label asp-for="ConfirmPassword">
+                            Confirm Password
+                        </label>
+
+                        <div class="input-wrapper">
+                            <i class="bi bi-lock-fill"></i>
 
                             <input asp-for="ConfirmPassword"
-                                   class="form-control"
-                                   type="password" />
-
-                            <span asp-validation-for="ConfirmPassword"
-                                  class="text-danger">
-                            </span>
+                                   type="password"
+                                   placeholder="Confirm password" />
                         </div>
 
-                        <div class="mb-4">
-                            <label asp-for="Role"
-                                   class="form-label fw-semibold">
-                                Role
-                            </label>
+                        <span asp-validation-for="ConfirmPassword"
+                              class="field-error">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Role -->
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <div class="section-icon role-icon">
+                        <i class="bi bi-person-gear"></i>
+                    </div>
+
+                    <div>
+                        <h5>Access & Role</h5>
+                        <span>Define what this user can access</span>
+                    </div>
+
+                </div>
+
+
+                <div class="role-selection">
+
+                    <div class="form-field">
+
+                        <label asp-for="Role">
+                            System Role
+                        </label>
+
+                        <div class="input-wrapper select-wrapper">
+                            <i class="bi bi-shield-check"></i>
 
                             <select asp-for="Role"
-                                    asp-items="ViewBag.Roles"
-                                    class="form-select">
+                                    asp-items="ViewBag.Roles">
 
                                 <option value="">
                                     -- Select Role --
@@ -121,37 +235,463 @@
 
                             </select>
 
-                            <span asp-validation-for="Role"
-                                  class="text-danger">
+                            <i class="bi bi-chevron-down select-arrow"></i>
+                        </div>
+
+                        <span asp-validation-for="Role"
+                              class="field-error">
+                        </span>
+
+                    </div>
+
+                    <div class="role-info">
+
+                        <i class="bi bi-info-circle"></i>
+
+                        <div>
+                            <strong>Role-based access</strong>
+
+                            <span>
+                                The selected role determines the user's permissions
+                                and available system features.
                             </span>
                         </div>
 
-                        <div class="d-flex justify-content-between">
-
-                            <a asp-action="Users"
-                               class="btn btn-outline-secondary">
-                                <i class="bi bi-arrow-left"></i>
-                                Back
-                            </a>
-
-                            <button type="submit"
-                                    class="btn btn-primary px-4">
-                                <i class="bi bi-check-circle me-1"></i>
-                                Create User
-                            </button>
-
-                        </div>
-
-                    </form>
+                    </div>
 
                 </div>
+
+            </section>
+
+
+            <!-- Actions -->
+            <div class="form-actions">
+
+                <a asp-action="Users"
+                   class="cancel-btn">
+
+                    <i class="bi bi-arrow-left"></i>
+                    Back to Users
+
+                </a>
+
+                <button type="submit"
+                        class="create-btn">
+
+                    <i class="bi bi-person-plus-fill"></i>
+
+                    Create User
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </button>
+
             </div>
 
-        </div>
+        </form>
+
     </div>
 
 </div>
 
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+<style>
+
+                    /* =========================================
+   Create User Page
+========================================= */
+
+.create-user-page {
+    width: 100%;
+    padding: 28px 35px 45px;
+}
+
+
+/* =========================================
+   Header
+========================================= */
+
+.create-user-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.page-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 9px;
+    font-size: 12px;
+    color: #9aa3ab;
+}
+
+.page-breadcrumb a {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #198754;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.page-breadcrumb i {
+    font-size: 9px;
+}
+
+.create-user-header h2 {
+    margin: 0;
+    color: #263238;
+    font-size: 28px;
+    font-weight: 750;
+    letter-spacing: -0.5px;
+}
+
+.create-user-header p {
+    margin: 6px 0 0;
+    color: #8a949d;
+    font-size: 13px;
+}
+
+.create-user-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eaf8f0;
+    color: #198754;
+    font-size: 25px;
+}
+
+
+/* =========================================
+   Form Wrapper
+========================================= */
+
+.create-user-form-wrapper {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #edf0f2;
+    border-radius: 20px;
+    padding: 10px 32px 30px;
+    box-shadow: 0 8px 30px rgba(35, 45, 55, 0.04);
+}
+
+
+/* =========================================
+   Sections
+========================================= */
+
+.form-section {
+    padding: 27px 0;
+    border-bottom: 1px solid #edf0f2;
+}
+
+.form-section:last-of-type {
+    border-bottom: none;
+}
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 23px;
+}
+
+.section-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eaf8f0;
+    color: #198754;
+    font-size: 17px;
+}
+
+.security-icon {
+    background: #f1efff;
+    color: #6f42c1;
+}
+
+.role-icon {
+    background: #fff5e8;
+    color: #fd7e14;
+}
+
+.section-heading h5 {
+    margin: 0 0 3px;
+    color: #303940;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.section-heading span {
+    color: #929ba3;
+    font-size: 11px;
+}
+
+
+/* =========================================
+   Form Grid
+========================================= */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 25px;
+}
+
+.full-field {
+    grid-column: 1 / -1;
+}
+
+.form-field label {
+    display: block;
+    margin-bottom: 8px;
+    color: #4a555e;
+    font-size: 12px;
+    font-weight: 650;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.input-wrapper > i:first-child {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a4adb5;
+    font-size: 15px;
+    pointer-events: none;
+}
+
+.input-wrapper input,
+.input-wrapper select {
+    width: 100%;
+    height: 46px;
+    border: 1px solid #e1e6e9;
+    border-radius: 10px;
+    background: #fafbfc;
+    color: #35404a;
+    font-size: 13px;
+    padding: 0 14px 0 42px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.input-wrapper input::placeholder {
+    color: #b1b8be;
+}
+
+.input-wrapper input:focus,
+.input-wrapper select:focus {
+    background: #ffffff;
+    border-color: #198754;
+    box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.08);
+}
+
+.input-wrapper:focus-within > i:first-child {
+    color: #198754;
+}
+
+
+/* =========================================
+   Select
+========================================= */
+
+.select-wrapper select {
+    appearance: none;
+    cursor: pointer;
+}
+
+.select-arrow {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ba4ab;
+    font-size: 11px;
+    pointer-events: none;
+}
+
+
+/* =========================================
+   Role Info
+========================================= */
+
+.role-selection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    align-items: end;
+}
+
+.role-info {
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: #f8fafb;
+    border: 1px solid #edf0f2;
+}
+
+.role-info > i {
+    color: #198754;
+    font-size: 16px;
+}
+
+.role-info strong {
+    display: block;
+    color: #4a555e;
+    font-size: 11px;
+    margin-bottom: 2px;
+}
+
+.role-info span {
+    display: block;
+    color: #929ba3;
+    font-size: 10px;
+    line-height: 1.4;
+}
+
+
+/* =========================================
+   Validation
+========================================= */
+
+.field-error {
+    display: block;
+    margin-top: 5px;
+    color: #dc3545;
+    font-size: 10px;
+}
+
+.validation-summary {
+    margin: 18px 0 5px;
+    padding: 12px 15px;
+    border-radius: 10px;
+    background: #fff4f4;
+    border: 1px solid #f5d0d0;
+    color: #dc3545;
+    font-size: 12px;
+}
+
+
+/* =========================================
+   Actions
+========================================= */
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 27px;
+}
+
+.cancel-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 18px;
+    border: 1px solid #e1e5e8;
+    border-radius: 10px;
+    color: #68747d;
+    background: #ffffff;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.cancel-btn:hover {
+    color: #343d44;
+    background: #f8f9fa;
+    border-color: #d5dadd;
+}
+
+.create-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    height: 44px;
+    padding: 0 21px;
+    border: none;
+    border-radius: 10px;
+    background: #198754;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 650;
+    cursor: pointer;
+    box-shadow: 0 5px 14px rgba(25, 135, 84, 0.18);
+    transition: all 0.2s ease;
+}
+
+.create-btn:hover {
+    background: #157347;
+    transform: translateY(-1px);
+    box-shadow: 0 7px 18px rgba(25, 135, 84, 0.24);
+}
+
+
+/* =========================================
+   Responsive
+========================================= */
+
+@@media (max-width: 768px) {
+
+    .create-user-page {
+        padding: 20px 15px 35px;
+    }
+
+    .create-user-header {
+        align-items: flex-start;
+    }
+
+    .create-user-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+    }
+
+    .create-user-header h2 {
+        font-size: 22px;
+    }
+
+    .create-user-form-wrapper {
+        padding: 5px 18px 25px;
+        border-radius: 15px;
+    }
+
+    .form-grid,
+    .role-selection {
+        grid-template-columns: 1fr;
+    }
+
+    .full-field {
+        grid-column: auto;
+    }
+
+    .form-actions {
+        gap: 10px;
+    }
+
+    .cancel-btn,
+    .create-btn {
+        flex: 1;
+        justify-content: center;
+    }
+}
+</style>

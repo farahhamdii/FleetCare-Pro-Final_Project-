@@ -4,82 +4,521 @@
     ViewData["Title"] = "Service Center Details";
 }
 
-<div class="container mt-4">
+<style>
+    .center-details-page {
+        padding: 28px 35px 45px;
+    }
 
-    <div class="row justify-content-center">
-        <div class="col-md-8">
+    .center-details-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
 
-            <div class="card shadow">
+    .center-breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        color: #9aa3ab;
+        font-size: 12px;
+    }
 
-                <div class="card-header">
-                    <h3 class="mb-0">
-                        <i class="bi bi-building me-2"></i>
-                        Service Center Details
-                    </h3>
+        .center-breadcrumb a {
+            color: #198754;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+    .center-details-header h2 {
+        margin: 0;
+        color: #263238;
+        font-size: 27px;
+        font-weight: 750;
+    }
+
+    .center-details-header p {
+        margin: 5px 0 0;
+        color: #8a949d;
+        font-size: 12px;
+    }
+
+    .center-actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .center-edit-btn {
+        background: #fff4cf;
+        color: #b27d00;
+        border: 1px solid #f2df9d;
+    }
+
+        .center-edit-btn:hover {
+            background: #ffeeb5;
+            color: #946800;
+        }
+
+    .center-back-btn {
+        background: #fff;
+        color: #68747d;
+        border-color: #dfe4e7;
+    }
+
+    .center-details-card {
+        background: #fff;
+        border: 1px solid #edf0f2;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 8px 30px rgba(35,45,55,.04);
+    }
+
+    .center-details-content {
+        display: grid;
+        grid-template-columns: 35% 65%;
+        min-height: 420px;
+    }
+
+    /* Left */
+
+    .center-overview {
+        padding: 30px;
+        background: linear-gradient(145deg, #f5fbf7, #fafbfc);
+        border-right: 1px solid #edf0f2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .center-icon-large {
+        width: 100px;
+        height: 100px;
+        border-radius: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #eaf8f0;
+        color: #198754;
+        font-size: 43px;
+        margin-bottom: 20px;
+    }
+
+    .center-overview h3 {
+        margin: 0;
+        color: #303940;
+        font-size: 21px;
+        font-weight: 750;
+    }
+
+    .center-overview p {
+        margin: 6px 0 18px;
+        color: #929ba3;
+        font-size: 11px;
+    }
+
+    .center-status {
+        padding: 7px 13px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+    }
+
+    .status-active {
+        background: #eaf8f0;
+        color: #198754;
+    }
+
+    .status-inactive {
+        background: #fff0f0;
+        color: #dc3545;
+    }
+
+    /* Right */
+
+    .center-info {
+        padding: 30px 35px;
+    }
+
+    .info-heading {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        margin-bottom: 20px;
+    }
+
+    .info-heading-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #edf6ff;
+        color: #0d6efd;
+        font-size: 17px;
+    }
+
+    .info-heading h5 {
+        margin: 0 0 3px;
+        color: #303940;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .info-heading span {
+        color: #929ba3;
+        font-size: 10px;
+    }
+
+    .center-info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 13px;
+    }
+
+    .info-item {
+        padding: 14px;
+        border: 1px solid #edf0f2;
+        border-radius: 12px;
+        background: #fafbfc;
+    }
+
+        .info-item.full {
+            grid-column: 1 / -1;
+        }
+
+        .info-item small {
+            display: block;
+            margin-bottom: 5px;
+            color: #9aa3ab;
+            font-size: 10px;
+        }
+
+        .info-item strong {
+            color: #3d474f;
+            font-size: 13px;
+        }
+
+        .info-item a {
+            color: #198754;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+            .info-item a:hover {
+                text-decoration: underline;
+            }
+
+    /* Services */
+
+    .services-box {
+        margin-top: 25px;
+        padding-top: 22px;
+        border-top: 1px solid #edf0f2;
+    }
+
+    .services-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 13px;
+    }
+
+    .services-title {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+    }
+
+        .services-title i {
+            color: #d99a00;
+        }
+
+        .services-title strong {
+            color: #3d474f;
+            font-size: 13px;
+        }
+
+    .services-count {
+        padding: 4px 8px;
+        border-radius: 7px;
+        background: #fff8df;
+        color: #b27d00;
+        font-size: 9px;
+        font-weight: 700;
+    }
+
+    .service-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .service-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 10px;
+        border-radius: 8px;
+        background: #f5fbf7;
+        border: 1px solid #dcefe3;
+        color: #198754;
+        font-size: 10px;
+        font-weight: 650;
+    }
+
+        .service-item i {
+            font-size: 10px;
+        }
+
+    .no-services {
+        padding: 12px;
+        border-radius: 9px;
+        background: #fafbfc;
+        color: #9aa3ab;
+        font-size: 10px;
+    }
+
+    @@media (max-width: 900px) {
+        .center-details-content {
+            grid-template-columns: 1fr;
+        }
+
+        .center-overview {
+            border-right: none;
+            border-bottom: 1px solid #edf0f2;
+            padding: 25px;
+        }
+    }
+
+    @@media (max-width: 600px) {
+        .center-details-page {
+            padding: 20px 15px 35px;
+        }
+
+        .center-details-header {
+            align-items: flex-start;
+        }
+
+            .center-details-header h2 {
+                font-size: 22px;
+            }
+
+        .center-actions {
+            flex-direction: column;
+        }
+
+        .center-info {
+            padding: 22px 18px;
+        }
+
+        .center-info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .info-item.full {
+            grid-column: auto;
+        }
+    }
+</style>
+
+
+<div class="center-details-page">
+
+    <!-- Header -->
+
+    <div class="center-details-header">
+
+        <div>
+
+            <div class="center-breadcrumb">
+
+                <a asp-action="Index">
+                    <i class="bi bi-buildings"></i>
+                    Service Centers
+                </a>
+
+                <i class="bi bi-chevron-right"></i>
+
+                <span>Details</span>
+
+            </div>
+
+            <h2>Service Center Details</h2>
+
+            <p>
+                View service center information and available maintenance services.
+            </p>
+
+        </div>
+
+
+        <div class="center-actions">
+
+            <a asp-action="Edit"
+               asp-route-id="@Model.Id"
+               class="btn btn-sm center-edit-btn">
+
+                <i class="bi bi-pencil me-1"></i>
+                Edit
+
+            </a>
+
+            <a asp-action="Index"
+               class="btn btn-sm center-back-btn">
+
+                <i class="bi bi-arrow-left me-1"></i>
+                Back
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Details -->
+
+    <div class="center-details-card">
+
+        <div class="center-details-content">
+
+            <!-- Overview -->
+
+            <div class="center-overview">
+
+                <div class="center-icon-large">
+                    <i class="bi bi-building"></i>
                 </div>
 
-                <div class="card-body">
+                <h3>
+                    @Model.Name
+                </h3>
 
-                    <dl class="row">
+                <p>
+                    Fleet Service Center
+                </p>
 
-                        <dt class="col-sm-4">Name</dt>
-                        <dd class="col-sm-8">
-                            @Model.Name
-                        </dd>
 
-                        <dt class="col-sm-4">Phone Number</dt>
-                        <dd class="col-sm-8">
+                @if (Model.IsActive)
+                {
+                    <span class="center-status status-active">
+                        <i class="bi bi-check-circle me-1"></i>
+                        Active
+                    </span>
+                }
+                else
+                {
+                    <span class="center-status status-inactive">
+                        <i class="bi bi-x-circle me-1"></i>
+                        Inactive
+                    </span>
+                }
+
+            </div>
+
+
+            <!-- Information -->
+
+            <div class="center-info">
+
+                <div class="info-heading">
+
+                    <div class="info-heading-icon">
+                        <i class="bi bi-info-circle"></i>
+                    </div>
+
+                    <div>
+                        <h5>Contact Information</h5>
+
+                        <span>
+                            Service center contact and location details
+                        </span>
+                    </div>
+
+                </div>
+
+
+                <div class="center-info-grid">
+
+                    <div class="info-item">
+
+                        <small>Phone Number</small>
+
+                        <strong>
                             @Model.PhoneNumber
-                        </dd>
+                        </strong>
 
-                        <dt class="col-sm-4">Email</dt>
-                        <dd class="col-sm-8">
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <small>Email Address</small>
+
+                        <a href="mailto:@Model.Email">
                             @Model.Email
-                        </dd>
+                        </a>
 
-                        <dt class="col-sm-4">Address</dt>
-                        <dd class="col-sm-8">
+                    </div>
+
+
+                    <div class="info-item full">
+
+                        <small>Address</small>
+
+                        <strong>
+                            <i class="bi bi-geo-alt me-1"></i>
                             @Model.Address
-                        </dd>
+                        </strong>
 
-                        <dt class="col-sm-4">Status</dt>
-                        <dd class="col-sm-8">
+                    </div>
 
-                            @if (Model.IsActive)
-                            {
-                                <span class="badge bg-success">
-                                    Active
-                                </span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-danger">
-                                    Inactive
-                                </span>
-                            }
-
-                        </dd>
-
-                    </dl>
+                </div>
 
 
-                    <!-- SERVICE CATEGORIES -->
+                <!-- Services -->
 
-                    <hr />
+                <div class="services-box">
 
-                    <h5 class="fw-bold mb-3">
-                        <i class="bi bi-tools me-2"></i>
-                        Available Services
-                    </h5>
+                    <div class="services-header">
+
+                        <div class="services-title">
+
+                            <i class="bi bi-tools"></i>
+
+                            <strong>
+                                Available Services
+                            </strong>
+
+                        </div>
+
+                        @if (Model.ServiceCategories.Any())
+                        {
+                            <span class="services-count">
+                                @Model.ServiceCategories.Count() Services
+                            </span>
+                        }
+
+                    </div>
+
 
                     @if (Model.ServiceCategories.Any())
                     {
-                        <div class="d-flex flex-wrap gap-2">
+                        <div class="service-list">
 
                             @foreach (var category in Model.ServiceCategories)
                             {
-                                <span class="badge bg-primary fs-6">
+                                <span class="service-item">
+
+                                    <i class="bi bi-check-circle-fill"></i>
+
                                     @category
+
                                 </span>
                             }
 
@@ -87,38 +526,18 @@
                     }
                     else
                     {
-                        <p class="text-muted">
+                        <div class="no-services">
+                            <i class="bi bi-info-circle me-1"></i>
                             No service categories assigned to this center.
-                        </p>
+                        </div>
                     }
-
-
-                    <div class="mt-4">
-
-                        <a asp-action="Edit"
-                           asp-route-id="@Model.Id"
-                           class="btn btn-warning">
-
-                            <i class="bi bi-pencil me-1"></i>
-                            Edit
-
-                        </a>
-
-                        <a asp-action="Index"
-                           class="btn btn-secondary">
-
-                            <i class="bi bi-arrow-left me-1"></i>
-                            Back
-
-                        </a>
-
-                    </div>
 
                 </div>
 
             </div>
 
         </div>
+
     </div>
 
 </div>

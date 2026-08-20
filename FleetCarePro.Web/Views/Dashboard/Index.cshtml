@@ -1,8 +1,18 @@
-﻿
-@model FleetCarePro.Web.ViewModels.Dashboard.DashboardViewModel
+﻿@model FleetCarePro.Web.ViewModels.Dashboard.DashboardViewModel
 
 @{
     ViewData["Title"] = "Dashboard";
+
+    // Derived, read-only stats for the status ring/progress bars.
+    // No new model properties needed — just safe percentages of the existing counts.
+    var totalRecords = Model.TotalServiceRecords;
+
+    double PercentOf(int value) => totalRecords > 0 ? Math.Round((double)value / totalRecords * 100, 1) : 0;
+
+    var pendingPct = PercentOf(Model.PendingServices);
+    var approvedPct = PercentOf(Model.ApprovedServices);
+    var completedPct = PercentOf(Model.CompletedServices);
+    var cancelledPct = PercentOf(Model.CancelledServices);
 }
 
 <div class="dashboard-page">
@@ -11,11 +21,12 @@
 
         <div>
             <span class="dashboard-eyebrow">
+                <i class="bi bi-lightning-charge-fill"></i>
                 FLEETCARE PRO
             </span>
 
             <h1 class="dashboard-title">
-                Welcome back 👋
+                Welcome back <span class="wave">👋</span>
             </h1>
 
             <p class="dashboard-subtitle">
@@ -68,7 +79,7 @@
                 </div>
 
             </div>
-    
+
 
             <!-- Service Centers -->
 
@@ -166,9 +177,10 @@
             </div>
 
         </div>
-    
 
 
+
+        <!-- Service Overview -->
         <!-- Service Overview -->
 
         <div class="dashboard-section-title">
@@ -186,113 +198,165 @@
         </div>
 
 
-        <div class="row g-4 mb-4">
+        <div class="service-overview-chart mb-4">
 
-            <!-- Pending -->
+            @{
+                var totalServices = Model.PendingServices
+                + Model.ApprovedServices
+                + Model.CompletedServices
+                + Model.CancelledServices;
 
-            <div class="col-6 col-xl-3">
-                <div class="status-card pending">
+                var pendingPercent = totalServices > 0
+                ? (double)Model.PendingServices / totalServices * 100
+                : 0;
 
-                    <div class="status-circle">
-                        <i class="bi bi-clock-history"></i>
+                var approvedPercent = totalServices > 0
+                ? (double)Model.ApprovedServices / totalServices * 100
+                : 0;
+
+                var completedPercent = totalServices > 0
+                ? (double)Model.CompletedServices / totalServices * 100
+                : 0;
+
+                var cancelledPercent = totalServices > 0
+                ? (double)Model.CancelledServices / totalServices * 100
+                : 0;
+            }
+
+
+            <!-- Donut Chart -->
+
+            <div class="service-donut-wrapper">
+
+                <div class="service-donut"
+                     style="
+                    --pending:@pendingPercent.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)%;
+                    --approved:@approvedPercent.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)%;
+                    --completed:@completedPercent.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)%;
+                    --cancelled:@cancelledPercent.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)%;
+
+                    --pending-end:var(--pending);
+                    --approved-end:calc(var(--pending) + var(--approved));
+                    --completed-end:calc(var(--pending) + var(--approved) + var(--completed));
+                 ">
+
+                    <div class="donut-center">
+                        <strong>@totalServices</strong>
+                        <span>Total Services</span>
                     </div>
 
-                    <span class="status-title">
-                        Pending
-                    </span>
-
-                    <strong class="status-number">
-                        @Model.PendingServices
-                    </strong>
-
-                    <a asp-controller="ServiceRecord"
-                       asp-action="Index"
-                       asp-route-status="Pending">
-                        Review Services
-                    </a>
-
                 </div>
+
             </div>
 
 
-            <!-- Approved -->
+            <!-- Legend -->
 
-            <div class="col-6 col-xl-3">
-                <div class="status-card approved">
+            <div class="service-status-list">
 
-                    <div class="status-circle">
-                        <i class="bi bi-check2-circle"></i>
+                <!-- Pending -->
+
+                <div class="service-status-item">
+
+                    <div class="service-status-info">
+                        <span class="status-dot pending-dot"></span>
+
+                        <div>
+                            <span class="service-status-name">
+                                Pending
+                            </span>
+
+                            <small>
+                                Awaiting review
+                            </small>
+                        </div>
                     </div>
 
-                    <span class="status-title">
-                        Approved
-                    </span>
-
-                    <strong class="status-number">
-                        @Model.ApprovedServices
-                    </strong>
-
-                    <a asp-controller="ServiceRecord"
-                       asp-action="Index"
-                       asp-route-status="Approved">
-                        View Services
-                    </a>
-
-                </div>
-            </div>
-
-
-            <!-- Completed -->
-
-            <div class="col-6 col-xl-3">
-                <div class="status-card completed">
-
-                    <div class="status-circle">
-                        <i class="bi bi-check-all"></i>
+                    <div class="service-status-value">
+                        <strong>@Model.PendingServices</strong>
+                        <span>@pendingPercent.ToString("0.#")%</span>
                     </div>
 
-                    <span class="status-title">
-                        Completed
-                    </span>
-
-                    <strong class="status-number">
-                        @Model.CompletedServices
-                    </strong>
-
-                    <a asp-controller="ServiceRecord"
-                       asp-action="Index"
-                       asp-route-status="Completed">
-                        View Services
-                    </a>
-
                 </div>
-            </div>
 
 
-            <!-- Cancelled -->
+                <!-- Approved -->
 
-            <div class="col-6 col-xl-3">
-                <div class="status-card cancelled">
+                <div class="service-status-item">
 
-                    <div class="status-circle">
-                        <i class="bi bi-x-circle"></i>
+                    <div class="service-status-info">
+                        <span class="status-dot approved-dot"></span>
+
+                        <div>
+                            <span class="service-status-name">
+                                Approved
+                            </span>
+
+                            <small>
+                                Ready for service
+                            </small>
+                        </div>
                     </div>
 
-                    <span class="status-title">
-                        Cancelled
-                    </span>
-
-                    <strong class="status-number">
-                        @Model.CancelledServices
-                    </strong>
-
-                    <a asp-controller="ServiceRecord"
-                       asp-action="Index"
-                       asp-route-status="Cancelled">
-                        View Services
-                    </a>
+                    <div class="service-status-value">
+                        <strong>@Model.ApprovedServices</strong>
+                        <span>@approvedPercent.ToString("0.#")%</span>
+                    </div>
 
                 </div>
+
+
+                <!-- Completed -->
+
+                <div class="service-status-item">
+
+                    <div class="service-status-info">
+                        <span class="status-dot completed-dot"></span>
+
+                        <div>
+                            <span class="service-status-name">
+                                Completed
+                            </span>
+
+                            <small>
+                                Successfully completed
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="service-status-value">
+                        <strong>@Model.CompletedServices</strong>
+                        <span>@completedPercent.ToString("0.#")%</span>
+                    </div>
+
+                </div>
+
+
+                <!-- Cancelled -->
+
+                <div class="service-status-item">
+
+                    <div class="service-status-info">
+                        <span class="status-dot cancelled-dot"></span>
+
+                        <div>
+                            <span class="service-status-name">
+                                Cancelled
+                            </span>
+
+                            <small>
+                                Cancelled services
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="service-status-value">
+                        <strong>@Model.CancelledServices</strong>
+                        <span>@cancelledPercent.ToString("0.#")%</span>
+                    </div>
+
+                </div>
+
             </div>
 
         </div>
@@ -450,10 +514,9 @@
         <!-- Service Overview -->
 
         <div class="dashboard-section-title">
-
             <div>
                 <h4>Service Overview</h4>
-                <p>Monitor and review fleet maintenance activity</p>
+                <p>Current maintenance status across the fleet</p>
             </div>
 
             <a asp-controller="ServiceRecord"
@@ -462,109 +525,168 @@
                 View all records
                 <i class="bi bi-arrow-right"></i>
             </a>
-
         </div>
 
 
-        <div class="row g-4 mb-4">
+        <div class="service-overview-chart mb-4">
 
-            <div class="col-6 col-xl-3">
-                <div class="status-card pending">
+            @{
+                var totalServices = Model.PendingServices
+                + Model.ApprovedServices
+                + Model.CompletedServices
+                + Model.CancelledServices;
 
-                    <div class="status-circle">
-                        <i class="bi bi-clock-history"></i>
+                var pendingPercent = totalServices > 0
+                ? (double)Model.PendingServices / totalServices * 100
+                : 0;
+
+                var approvedPercent = totalServices > 0
+                ? (double)Model.ApprovedServices / totalServices * 100
+                : 0;
+
+                var completedPercent = totalServices > 0
+                ? (double)Model.CompletedServices / totalServices * 100
+                : 0;
+
+                var cancelledPercent = totalServices > 0
+                ? (double)Model.CancelledServices / totalServices * 100
+                : 0;
+            }
+
+
+            <!-- Donut Chart -->
+
+            <div class="service-donut-wrapper">
+
+                <div class="service-donut"
+                     style="
+                        --pending:@pendingPercent.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)%;
+                        --approved:@approvedPercent.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)%;
+                        --completed:@completedPercent.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)%;
+                        --cancelled:@cancelledPercent.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)%;
+
+                        --pending-end:var(--pending);
+                        --approved-end:calc(var(--pending) + var(--approved));
+                        --completed-end:calc(var(--pending) + var(--approved) + var(--completed));
+                     ">
+
+                    <div class="donut-center">
+                        <strong>@totalServices</strong>
+                        <span>Total Services</span>
                     </div>
 
-                    <span class="status-title">
-                        Pending
-                    </span>
-
-                    <strong class="status-number">
-                        @Model.PendingServices
-                    </strong>
-
-                    <a asp-controller="ServiceRecord"
-                       asp-action="Index"
-                       asp-route-status="Pending">
-                        Review
-                    </a>
-
                 </div>
+
             </div>
 
 
-            <div class="col-6 col-xl-3">
-                <div class="status-card approved">
+            <!-- Legend -->
 
-                    <div class="status-circle">
-                        <i class="bi bi-check2-circle"></i>
+            <div class="service-status-list">
+
+                <!-- Pending -->
+
+                <div class="service-status-item">
+
+                    <div class="service-status-info">
+                        <span class="status-dot pending-dot"></span>
+
+                        <div>
+                            <span class="service-status-name">
+                                Pending
+                            </span>
+
+                            <small>
+                                Awaiting review
+                            </small>
+                        </div>
                     </div>
 
-                    <span class="status-title">
-                        Approved
-                    </span>
-
-                    <strong class="status-number">
-                        @Model.ApprovedServices
-                    </strong>
-
-                    <a asp-controller="ServiceRecord"
-                       asp-action="Index"
-                       asp-route-status="Approved">
-                        View
-                    </a>
-
-                </div>
-            </div>
-
-
-            <div class="col-6 col-xl-3">
-                <div class="status-card completed">
-
-                    <div class="status-circle">
-                        <i class="bi bi-check-all"></i>
+                    <div class="service-status-value">
+                        <strong>@Model.PendingServices</strong>
+                        <span>@pendingPercent.ToString("0.#")%</span>
                     </div>
 
-                    <span class="status-title">
-                        Completed
-                    </span>
-
-                    <strong class="status-number">
-                        @Model.CompletedServices
-                    </strong>
-
-                    <a asp-controller="ServiceRecord"
-                       asp-action="Index"
-                       asp-route-status="Completed">
-                        View
-                    </a>
-
                 </div>
-            </div>
 
 
-            <div class="col-6 col-xl-3">
-                <div class="status-card cancelled">
+                <!-- Approved -->
 
-                    <div class="status-circle">
-                        <i class="bi bi-x-circle"></i>
+                <div class="service-status-item">
+
+                    <div class="service-status-info">
+                        <span class="status-dot approved-dot"></span>
+
+                        <div>
+                            <span class="service-status-name">
+                                Approved
+                            </span>
+
+                            <small>
+                                Ready for service
+                            </small>
+                        </div>
                     </div>
 
-                    <span class="status-title">
-                        Cancelled
-                    </span>
-
-                    <strong class="status-number">
-                        @Model.CancelledServices
-                    </strong>
-
-                    <a asp-controller="ServiceRecord"
-                       asp-action="Index"
-                       asp-route-status="Cancelled">
-                        View
-                    </a>
+                    <div class="service-status-value">
+                        <strong>@Model.ApprovedServices</strong>
+                        <span>@approvedPercent.ToString("0.#")%</span>
+                    </div>
 
                 </div>
+
+
+                <!-- Completed -->
+
+                <div class="service-status-item">
+
+                    <div class="service-status-info">
+                        <span class="status-dot completed-dot"></span>
+
+                        <div>
+                            <span class="service-status-name">
+                                Completed
+                            </span>
+
+                            <small>
+                                Successfully completed
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="service-status-value">
+                        <strong>@Model.CompletedServices</strong>
+                        <span>@completedPercent.ToString("0.#")%</span>
+                    </div>
+
+                </div>
+
+
+                <!-- Cancelled -->
+
+                <div class="service-status-item">
+
+                    <div class="service-status-info">
+                        <span class="status-dot cancelled-dot"></span>
+
+                        <div>
+                            <span class="service-status-name">
+                                Cancelled
+                            </span>
+
+                            <small>
+                                Cancelled services
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="service-status-value">
+                        <strong>@Model.CancelledServices</strong>
+                        <span>@cancelledPercent.ToString("0.#")%</span>
+                    </div>
+
+                </div>
+
             </div>
 
         </div>
@@ -662,4 +784,3 @@
     }
 
 </div>
-

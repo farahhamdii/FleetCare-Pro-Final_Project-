@@ -26,7 +26,6 @@ namespace FleetCarePro.Web
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure();
 
-            // 👈 نداء واحد بس لـ AutoMapper، بياخد بروفايلات Application و Web مع بعض
             builder.Services.AddAutoMapper(cfg => { },
                 typeof(FleetCarePro.Application.Mapping.MappingProfile).Assembly,
                 typeof(FleetCarePro.Web.Mapping.MappingProfile).Assembly);

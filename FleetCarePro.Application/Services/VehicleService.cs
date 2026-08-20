@@ -9,14 +9,16 @@ namespace FleetCarePro.Application.Services;
 public class VehicleService : IVehicleService
 {
     private readonly IVehicleRepository _vehicleRepository;
+    private readonly IServiceRecordRepository _serviceRecordRepository;
     private readonly IMapper _mapper;
 
     public VehicleService(
         IVehicleRepository vehicleRepository,
-        IMapper mapper)
+        IMapper mapper,IServiceRecordRepository serviceRecordRepository)
     {
         _vehicleRepository = vehicleRepository;
         _mapper = mapper;
+        _serviceRecordRepository = serviceRecordRepository;
     }
 
     public async Task<IEnumerable<VehicleDto>> GetAllAsync()
@@ -66,13 +68,17 @@ public class VehicleService : IVehicleService
             return null;
         return _mapper.Map<VehicleDto>(vehicle);
     }
-    public async Task<bool> DeleteAsync(int id)
+    public async Task<bool> DeleteAsync(int vehicleId)
     {
-        var vehicle = await _vehicleRepository.GetByIdAsync(id);
+        var vehicle = await _vehicleRepository.GetByIdAsync(vehicleId);
         if (vehicle == null)
             return false;
-        _vehicleRepository.Delete(vehicle);
-        await _vehicleRepository.SaveChangesAsync();
+        var serviceRecords = await _serviceRecordRepository.GetAllAsync();
+        var hasServiceRecords = serviceRecords
+            .Any(x => x.VehicleId == vehicleId);
+        if (hasServiceRecords)
+            return false;
+         _vehicleRepository.Delete(vehicle);
         return true;
     }
 }

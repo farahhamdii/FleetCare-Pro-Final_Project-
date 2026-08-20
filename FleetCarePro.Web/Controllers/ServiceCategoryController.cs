@@ -101,9 +101,13 @@ public class ServiceCategoryController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(int id)
     {
-        var success=await _serviceCategoryService.DeleteAsync(id);
-        if (!success)return NotFound();
+        var success = await _serviceCategoryService.DeleteAsync(id);
 
+        if (!success)
+        {
+            TempData["ErrorMessage"] ="This service category cannot be deleted because it is already used.";
+            return RedirectToAction(nameof(Index));
+        }
         TempData["SuccessMessage"] = "Service category deleted successfully.";
         return RedirectToAction(nameof(Index));
     }
